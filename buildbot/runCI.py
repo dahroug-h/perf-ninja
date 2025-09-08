@@ -67,6 +67,7 @@ if runner == "LinuxIntelAlderlake":
   Labs["memory_bound"]["mem_alignment_1"] = LabParams(threshold=10.0)
   Labs["memory_bound"]["mem_order_violation_1"] = LabParams(threshold=10.0)
   Labs["memory_bound"]["swmem_prefetch_1"] = LabParams(threshold=60.0)
+  Labs["memory_bound"]["nt_stores"] = LabParams(threshold=10.0)
   Labs["misc"]["warmup"] = LabParams(threshold=50.0)
   Labs["misc"]["lto"] = LabParams(threshold=20.0)
   Labs["misc"]["pgo"] = LabParams(threshold=10.0)
@@ -94,6 +95,7 @@ elif runner == "LinuxIntelCoffeelake":
   Labs["memory_bound"]["mem_alignment_1"] = LabParams(threshold=10.0)
   Labs["memory_bound"]["mem_order_violation_1"] = LabParams(threshold=5.0)
   Labs["memory_bound"]["swmem_prefetch_1"] = LabParams(threshold=40.0)
+  Labs["memory_bound"]["nt_stores"] = LabParams(threshold=10.0)
   Labs["misc"]["warmup"] = LabParams(threshold=50.0)
   Labs["misc"]["lto"] = LabParams(threshold=20.0)
   Labs["misc"]["pgo"] = LabParams(threshold=5.0)
@@ -121,6 +123,7 @@ elif runner == "WinZen3":
   Labs["memory_bound"]["mem_alignment_1"] = LabParams(threshold=5.0)
   Labs["memory_bound"]["mem_order_violation_1"] = LabParams(threshold=25.0)
   Labs["memory_bound"]["swmem_prefetch_1"] = LabParams(threshold=40.0)
+  Labs["memory_bound"]["nt_stores"] = LabParams(threshold=10.0)
   Labs["misc"]["warmup"] = LabParams(threshold=50.0)
   Labs["misc"]["lto"] = LabParams(threshold=20.0)
   Labs["misc"]["pgo"] = LabParams(threshold=10.0)
@@ -148,6 +151,7 @@ elif runner == "MacosM1":
   Labs["memory_bound"]["mem_alignment_1"] = LabParams(threshold=10.0)
   Labs["memory_bound"]["mem_order_violation_1"] = LabParams(threshold=40.0)
   Labs["memory_bound"]["swmem_prefetch_1"] = LabParams(threshold=50.0)
+  Labs["memory_bound"]["nt_stores"] = LabParams(threshold=10.0)
   Labs["misc"]["warmup"] = LabParams(threshold=50.0)
   Labs["misc"]["lto"] = LabParams(threshold=10.0)
   Labs["misc"]["pgo"] = LabParams(threshold=10.0)
@@ -251,7 +255,7 @@ def checkoutBaseline(workdir):
 
   try:
     # Branch 'main' is always the baseline
-    subprocess.check_call("git checkout main", shell=True)
+    subprocess.check_call("git checkout nt_stores", shell=True)
     print("Checkout baseline - OK")
   except:
     print(bcolors.FAIL + "Checkout baseline - Failed" + bcolors.ENDC)
