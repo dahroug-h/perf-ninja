@@ -40,7 +40,7 @@ inline void nt_copy_cache_line(const char* from, char* to) {
 #endif  // __x86_64__
 }
 
-// #define SOLUTION
+#define SOLUTION
   
 struct alignas(64) message {
     uint64_t id;
