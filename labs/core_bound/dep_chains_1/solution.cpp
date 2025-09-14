@@ -25,6 +25,31 @@ unsigned solution(List *l1, List *l2) {
 
   List *head2 = l2;
   // O(N^2) algorithm:
+  while (l1 && l1->next && l1->next->next && l1->next->next->next) {
+    unsigned v1 = l1->value;
+    unsigned v2 = l1->next->value;
+    unsigned v3 = l1->next->next->value;
+    unsigned v4 = l1->next->next->next->value;
+
+    l2 = head2;
+    while (l2) {
+      if (l2->value == v1) {
+        retVal += getSumOfDigits(v1);
+      }
+      if (l2->value == v2) {
+        retVal += getSumOfDigits(v2);
+      }
+      if (l2->value == v3) {
+        retVal += getSumOfDigits(v3);
+      }
+      if (l2->value == v4) {
+        retVal += getSumOfDigits(v4);
+      }
+      l2 = l2->next;
+    }
+    l1 = l1->next->next->next->next;
+  }
+
   while (l1) {
     unsigned v = l1->value;
     l2 = head2;
