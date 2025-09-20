@@ -50,17 +50,36 @@ static float cosine(float x) {
 // We do calculations in double precision then convert to float.
 constexpr float DEGREE_TO_RADIAN = (2 * PI_D) / UINT32_MAX;
 
+static void advance(Particle& p, const float angle) {
+    float angle_rad1 = angle * DEGREE_TO_RADIAN;
+    p.x += cosine(angle_rad1) * p.velocity;
+    p.y += sine(angle_rad1) * p.velocity;
+}
+
 // Simulate the motion of the particles.
 // For every particle, we generate a random angle and move the particle
 // in the corresponding direction.
 template <class RNG>
 void randomParticleMotion(std::vector<Particle> &particles, uint32_t seed) {
-  RNG rng(seed);  
-  for (int i = 0; i < STEPS; i++)
-    for (auto &p : particles) {
-      uint32_t angle = rng.gen();
-      float angle_rad = angle * DEGREE_TO_RADIAN;
-      p.x += cosine(angle_rad) * p.velocity;
-      p.y += sine(angle_rad) * p.velocity;
+  RNG rng1(seed);
+  RNG rng2(seed);
+  RNG rng3(seed);
+  RNG rng4(seed);
+  RNG rng5(seed);
+  RNG rng6(seed);
+  RNG rng7(seed);
+  RNG rng8(seed);
+  for (int i = 0; i < STEPS; i++) {
+    for (int j = 0; j + 7 < particles.size(); j += 8) {
+      auto& p1 = particles[j];
+      advance(particles[j], rng1.gen());
+      advance(particles[j+1], rng2.gen());
+      advance(particles[j+2], rng3.gen());
+      advance(particles[j+3], rng4.gen());
+      advance(particles[j+4], rng5.gen());
+      advance(particles[j+5], rng6.gen());
+      advance(particles[j+6], rng7.gen());
+      advance(particles[j+7], rng8.gen());
     }
+  }
 }
