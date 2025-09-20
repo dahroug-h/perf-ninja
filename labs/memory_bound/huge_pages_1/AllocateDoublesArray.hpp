@@ -42,90 +42,90 @@
 // https://stackoverflow.com/questions/42354504/enable-large-pages-in-windows-programmatically
 namespace detail {
 inline void InitLsaString(PLSA_UNICODE_STRING LsaString, LPWSTR String) {
-  DWORD StringLength;
+    DWORD StringLength;
 
   if (String == NULL) {
-    LsaString->Buffer = NULL;
-    LsaString->Length = 0;
-    LsaString->MaximumLength = 0;
-    return;
+      LsaString->Buffer = NULL;
+      LsaString->Length = 0;
+      LsaString->MaximumLength = 0;
+      return;
+    }
+
+    StringLength = wcslen(String);
+    LsaString->Buffer = String;
+    LsaString->Length = (USHORT)StringLength * sizeof(WCHAR);
+    LsaString->MaximumLength = (USHORT)(StringLength + 1) * sizeof(WCHAR);
   }
 
-  StringLength = wcslen(String);
-  LsaString->Buffer = String;
-  LsaString->Length = (USHORT)StringLength * sizeof(WCHAR);
-  LsaString->MaximumLength = (USHORT)(StringLength + 1) * sizeof(WCHAR);
-}
-
 inline auto openProcToken(DWORD desired_access) {
-  using handle_t = std::pointer_traits<HANDLE>::element_type;
+    using handle_t = std::pointer_traits<HANDLE>::element_type;
   constexpr auto handle_cleanup = [](HANDLE ptr) { CloseHandle(ptr); };
-  using ret_t = std::unique_ptr<handle_t, decltype(+handle_cleanup)>;
+    using ret_t = std::unique_ptr<handle_t, decltype(+handle_cleanup)>;
 
-  HANDLE handle{};
-  if (!OpenProcessToken(GetCurrentProcess(), desired_access, &handle))
-    throw std::runtime_error{"OpenProcessToken failed"};
-  return ret_t{handle, +handle_cleanup};
-}
+    HANDLE handle{};
+    if (!OpenProcessToken(GetCurrentProcess(), desired_access, &handle))
+      throw std::runtime_error{"OpenProcessToken failed"};
+    return ret_t{handle, +handle_cleanup};
+  }
 
 inline auto getUserToken() {
-  auto proc_token = detail::openProcToken(TOKEN_QUERY);
+    auto proc_token = detail::openProcToken(TOKEN_QUERY);
 
-  // Probe the buffer size reqired for PTOKEN_USER structure
-  DWORD dwbuf_sz = 0;
-  if (!GetTokenInformation(proc_token.get(), TokenUser, nullptr, 0,
-                              &dwbuf_sz) &&
-      (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
-    throw std::runtime_error{"GetTokenInformation failed"};
+    // Probe the buffer size reqired for PTOKEN_USER structure
+    DWORD dwbuf_sz = 0;
+    if (!GetTokenInformation(proc_token.get(), TokenUser, nullptr, 0,
+                             &dwbuf_sz) &&
+        (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
+      throw std::runtime_error{"GetTokenInformation failed"};
 
-  // Retrieve the token information in a TOKEN_USER structure
+    // Retrieve the token information in a TOKEN_USER structure
   constexpr auto deleter = [](PTOKEN_USER ptr) { free(ptr); };
-  PTOKEN_USER ptr = (PTOKEN_USER)malloc(dwbuf_sz);
-  std::unique_ptr<TOKEN_USER, decltype(deleter)> user_token{ptr, deleter};
-  if (!GetTokenInformation(proc_token.get(), TokenUser, user_token.get(),
-                              dwbuf_sz, &dwbuf_sz))
-    throw std::runtime_error{"GetTokenInformation failed"};
+    PTOKEN_USER ptr = (PTOKEN_USER)malloc(dwbuf_sz);
+    std::unique_ptr<TOKEN_USER, decltype(deleter)> user_token{ptr, deleter};
+    if (!GetTokenInformation(proc_token.get(), TokenUser, user_token.get(),
+                             dwbuf_sz, &dwbuf_sz))
+      throw std::runtime_error{"GetTokenInformation failed"};
 
-  return user_token;
-}
+    return user_token;
+  }
 
 inline void adjustAccountPrivilege() {
-  auto user_token = getUserToken();
+    auto user_token = getUserToken();
 
-  LSA_OBJECT_ATTRIBUTES obj_attrib{};
-  LSA_HANDLE policy_handle;
-  if (LsaOpenPolicy(nullptr, &obj_attrib,
-                    POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
-                    &policy_handle))
-    throw std::runtime_error{"LsaOpenPolicy failed"};
+    LSA_OBJECT_ATTRIBUTES obj_attrib{};
+    LSA_HANDLE policy_handle;
+    if (LsaOpenPolicy(nullptr, &obj_attrib,
+                      POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
+                      &policy_handle))
+      throw std::runtime_error{"LsaOpenPolicy failed"};
 
-  LSA_UNICODE_STRING privilege_string;
-  InitLsaString(&privilege_string, SE_LOCK_MEMORY_NAME);
-  if (LsaAddAccountRights(policy_handle, user_token->User.Sid,
-                          &privilege_string, 1))
-    throw std::runtime_error{"LsaAddAccountRights failed"};
-}
+    LSA_UNICODE_STRING privilege_string;
+    InitLsaString(&privilege_string, SE_LOCK_MEMORY_NAME);
+    if (LsaAddAccountRights(policy_handle, user_token->User.Sid,
+                            &privilege_string, 1))
+      throw std::runtime_error{"LsaAddAccountRights failed"};
+  }
 
 inline bool enableProcPrivilege() {
-  auto proc_token = openProcToken(TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES);
+    auto proc_token = openProcToken(TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES);
 
-  TOKEN_PRIVILEGES priv_token{};
-  priv_token.PrivilegeCount = 1;
-  priv_token.Privileges->Attributes = SE_PRIVILEGE_ENABLED;
+    TOKEN_PRIVILEGES priv_token{};
+    priv_token.PrivilegeCount = 1;
+    priv_token.Privileges->Attributes = SE_PRIVILEGE_ENABLED;
 
-  if (!LookupPrivilegeValue(NULL, SE_LOCK_MEMORY_NAME,
-                               &priv_token.Privileges->Luid))
-    throw std::runtime_error{"LookupPrivilegeValue failed"};
+    if (!LookupPrivilegeValue(NULL, SE_LOCK_MEMORY_NAME,
+                              &priv_token.Privileges->Luid))
+      throw std::runtime_error{"LookupPrivilegeValue failed"};
 
-  if (!AdjustTokenPrivileges(proc_token.get(), FALSE, &priv_token, 0,
-                                nullptr, 0))
-    throw std::runtime_error{"AdjustTokenPrivileges failed"};
+    if (!AdjustTokenPrivileges(proc_token.get(), FALSE, &priv_token, 0,
+                               nullptr, 0))
+      throw std::runtime_error{"AdjustTokenPrivileges failed"};
 
-  if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
-    return false;
-  else
-    return true;
-}
+    if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
+      return false;
+    else
+      return true;
+  }
 } // namespace detail
 
 inline bool setRequiredPrivileges() {
@@ -153,12 +153,24 @@ inline bool setRequiredPrivileges() {
 // std::unique_ptr<double[], D>, where `D` is a custom deleter type
 inline auto allocateDoublesArray(size_t size) {
   // Allocate memory
-  double *alloc = new double[size];
+  const auto bytes_size = sizeof(double) * size;
+  void *data = mmap(nullptr, bytes_size, PROT_READ | PROT_WRITE | PROT_EXEC,
+                    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  if (data == MAP_FAILED) {
+    throw "mmap failed";
+  }
+
+  if (madvise(data, bytes_size, MADV_HUGEPAGE) != 0) {
+      munmap(data, bytes_size);
+      throw "madvise failed";
+  }
+
+  double *alloc = (double*) data;
   // remember to cast the pointer to double* if your allocator returns void*
 
   // Deleters can be conveniently defined as lambdas, but you can explicitly
   // define a class if you're not comfortable with the syntax
-  auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+  auto deleter = [&](double *ptr) { munmap(data, bytes_size); };
 
   return std::unique_ptr<double[], decltype(deleter)>(alloc,
                                                       std::move(deleter));
