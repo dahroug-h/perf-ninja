@@ -9,7 +9,9 @@
 // In other words, it defines how many elements are in each row.
 // hint: you need to allocate dummy columns to achieve proper data alignment.
 int n_columns(int N) {  
-  return N;
+  constexpr int elements_per_line = CACHELINE_SIZE / sizeof(float);
+  const int cache_lines = (N + elements_per_line - 1) / elements_per_line;
+  return cache_lines * elements_per_line;
 }
 // ******************************************
 
