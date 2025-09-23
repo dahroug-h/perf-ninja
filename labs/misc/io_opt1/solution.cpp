@@ -1,10 +1,13 @@
 #include "solution.hpp"
 
+#include <cstdio>
 #include <fstream>
 #include <stdexcept>
 
+constexpr size_t BUFFER_SIZE = 1024 * 1024;
+
 uint32_t solution(const char *file_name) {
-  std::fstream file_stream{file_name};
+  std::ifstream file_stream{file_name};
   if (!file_stream.is_open())
     throw std::runtime_error{"The file could not be opened"};
 
@@ -12,12 +15,15 @@ uint32_t solution(const char *file_name) {
   uint32_t crc = 0xff'ff'ff'ff;
 
   // Update the CRC32 value character by character
-  char c;
+  char buffer[BUFFER_SIZE];
   while (true) {
-    file_stream.read(&c, 1);
+    file_stream.read(buffer, BUFFER_SIZE);
+    const size_t count = file_stream.gcount();
+    for (size_t idx = 0; idx < count; idx++) {
+      update_crc32(crc, static_cast<uint8_t>(buffer[idx]));
+    }
     if (file_stream.eof())
       break;
-    update_crc32(crc, static_cast<uint8_t>(c));
   }
 
   // Invert the bits
