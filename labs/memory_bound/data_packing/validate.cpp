@@ -1,7 +1,6 @@
 #include "solution.h"
 #include <algorithm>
 #include <iostream>
-#include <tuple>
 
 template <typename Received_t, typename Expected_t>
 static void reportError(const char *var_name, Received_t received,
