@@ -6,12 +6,25 @@ constexpr int minRandom = 0;
 constexpr int maxRandom = 100;
 
 // FIXME: this data structure can be reduced in size
+// p = padding
+// old layout 40 bytes
+// i i i i p*4 l l l l l l l l s s p*6 d d d d d d d d b p*7
+// without data type changing, new layout 24 bytes
+// l l l l l l l l d d d d d d d d i i i i s s b p
+// and by observing the range is between 0 ~ 100 
+// and test has a tolerance of floating point precision of 0.001
+// we can just use short and float
 struct S {
-  int i;
-  long long l;
+  short l;
+  float d;
+  short i;
   short s;
-  double d;
   bool b;
+  // int i;
+  // long long l;
+  // short s;
+  // double d;
+  // bool b;
 
   bool operator<(const S &s) const { return this->i < s.i; }
 };
