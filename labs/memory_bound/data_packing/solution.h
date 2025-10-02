@@ -14,12 +14,13 @@ constexpr int maxRandom = 100;
 // and by observing the range is between 0 ~ 100 
 // and test has a tolerance of floating point precision of 0.001
 // we can just use short and float
+// and then further we realize we could use the bit field to go even further
 struct S {
-  short l;
   float d;
-  short i;
-  short s;
-  bool b;
+  short l : 16;
+  short i : 8;
+  short s : 7;
+  bool b  : 1;
   // int i;
   // long long l;
   // short s;
