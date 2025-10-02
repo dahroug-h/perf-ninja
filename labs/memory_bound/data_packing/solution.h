@@ -1,3 +1,4 @@
+#include <cstdint> 
 #include <vector>
 
 // Assume those constants never change
@@ -14,13 +15,13 @@ constexpr int maxRandom = 100;
 // and by observing the range is between 0 ~ 100 
 // and test has a tolerance of floating point precision of 0.001
 // we can just use short and float
-// and then further we realize we could use the bit field to go even further
+// and then further we realize we could use the uint8_t and uint16_t to go even further
 struct S {
   float d;
-  short l : 16;
-  short i : 8;
-  short s : 7;
-  bool b  : 1;
+  uint16_t l;
+  uint8_t i;
+  uint8_t s;
+  bool b;
   // int i;
   // long long l;
   // short s;
