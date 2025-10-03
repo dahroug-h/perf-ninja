@@ -1,6 +1,6 @@
 #include <iostream>
 #include <memory>
-
+#include <assert.h>
 #if defined(__linux__) || defined(__linux) || defined(linux) ||                \
     defined(__gnu_linux__)
 #define ON_LINUX
@@ -153,12 +153,15 @@ inline bool setRequiredPrivileges() {
 // std::unique_ptr<double[], D>, where `D` is a custom deleter type
 inline auto allocateDoublesArray(size_t size) {
   // Allocate memory
-  double *alloc = new double[size];
+  double *alloc = static_cast<double *>(mmap(NULL, sizeof(double) * size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0));
+  assert((void *)alloc != MAP_FAILED);
+  // double *alloc = new double[size];
   // remember to cast the pointer to double* if your allocator returns void*
 
   // Deleters can be conveniently defined as lambdas, but you can explicitly
   // define a class if you're not comfortable with the syntax
-  auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+  // auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+  auto deleter = [size](double *ptr) { assert(munmap(ptr, sizeof(double) * size) == 0); };
 
   return std::unique_ptr<double[], decltype(deleter)>(alloc,
                                                       std::move(deleter));
