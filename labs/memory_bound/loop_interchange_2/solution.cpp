@@ -3,14 +3,24 @@
 #include <algorithm>
 #include <fstream>
 #include <ios>
-
 // Applies Gaussian blur in independent vertical lines
 static void filterVertically(uint8_t *output, const uint8_t *input,
                              const int width, const int height,
                              const int *kernel, const int radius,
                              const int shift) {
   const int rounding = 1 << (shift - 1);
-
+  for (int r = radius; r < height - radius; r++) {
+    int dot_arr[kMaxImageDimension] = {0};
+    for (int i = 0; i < radius + 1 + radius; i++) {
+      for (int c = 0; c < width; c++) {
+        dot_arr[c] += kernel[i] * input[(r - radius + i) * width + c];
+      }
+    }
+    for (int c = 0; c < width; c++) {
+      int value = (dot_arr[c] + rounding) >> shift;
+      output[r * width + c] = value;
+    }
+  }
   for (int c = 0; c < width; c++) {
     // Top part of line, partial kernel
     for (int r = 0; r < std::min(radius, height); r++) {
@@ -29,18 +39,18 @@ static void filterVertically(uint8_t *output, const uint8_t *input,
       output[r * width + c] = static_cast<uint8_t>(value);
     }
 
-    // Middle part of computations with full kernel
-    for (int r = radius; r < height - radius; r++) {
-      // Accumulation
-      int dot = 0;
-      for (int i = 0; i < radius + 1 + radius; i++) {
-        dot += input[(r - radius + i) * width + c] * kernel[i];
-      }
+    // // Middle part of computations with full kernel
+    // for (int r = radius; r < height - radius; r++) {
+    //   // Accumulation
+    //   int dot = 0;
+    //   for (int i = 0; i < radius + 1 + radius; i++) {
+    //     dot += input[(r - radius + i) * width + c] * kernel[i];
+    //   }
 
-      // Fast shift instead of division
-      int value = (dot + rounding) >> shift;
-      output[r * width + c] = static_cast<uint8_t>(value);
-    }
+    //   // Fast shift instead of division
+    //   int value = (dot + rounding) >> shift;
+    //   output[r * width + c] = static_cast<uint8_t>(value);
+    // }
 
     // Bottom part of line, partial kernel
     for (int r = std::max(radius, height - radius); r < height; r++) {
@@ -67,7 +77,18 @@ static void filterHorizontally(uint8_t *output, const uint8_t *input,
                                const int *kernel, const int radius,
                                const int shift) {
   const int rounding = 1 << (shift - 1);
-
+  // for (int r = radius; r < height - radius; r++) {
+  //   int dot_arr[kMaxImageDimension] = {0};
+  //   for (int i = 0; i < radius + 1 + radius; i++) {
+  //     for (int c = 0; c < width; c++) {
+  //       dot_arr[c] += kernel[i] * input[(r - radius + i) * width + c];
+  //     }
+  //   }
+  //   for (int c = 0; c < width; c++) {
+  //     int value = (dot_arr[c] + rounding) >> shift;
+  //     output[r * width + c] = value;
+  //   }
+  // }
   for (int r = 0; r < height; r++) {
     // Left part of line, partial kernel
     for (int c = 0; c < std::min(radius, width); c++) {
