@@ -10,11 +10,22 @@
 // ONLY THE FOLLOWING FUNCTION IS BENCHMARKED
 // Compute the histogram of image pixels
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
-  std::array<uint32_t, 256> hist;
-  hist.fill(0);
-  for (int i = 0; i < image.width * image.height; ++i)
-    hist[image.data[i]]++;
-  return hist;
+  constexpr int N = 8;
+  std::array<std::array<uint32_t, 256>, N> hist;
+  for (auto& row: hist) {
+    row.fill(0);
+  }
+  for (int i = 0; i < image.width * image.height; i += N) {
+    for (int j = 0; j < N; j++) {
+      hist[j][image.data[i+j]]++;
+    }
+  }
+  for (int i = 1; i < N; i++) {
+    for (int j = 0; j < 256; j++) {
+      hist[0][j] += hist[i][j];
+    }
+  }
+  return hist[0];
 }
 // ******************************************
 
