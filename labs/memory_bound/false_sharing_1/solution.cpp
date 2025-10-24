@@ -18,6 +18,7 @@ std::size_t solution(const std::vector<uint32_t> &data, int thread_count) {
   {
     int target_index = omp_get_thread_num();
     auto &target = accumulators[target_index];
+    uint32_t sum = target.value;
 
 #pragma omp for
     for (int i = 0; i < data.size(); i++) {
@@ -28,8 +29,9 @@ std::size_t solution(const std::vector<uint32_t> &data, int thread_count) {
       item |= (item >> 24);
 
       // Write result to accumulator
-      target.value += item % 13;
+      sum += item % 13;
     }
+    target.value = sum;
   }
 
   std::size_t result = 0;
