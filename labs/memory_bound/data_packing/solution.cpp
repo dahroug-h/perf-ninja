@@ -10,7 +10,7 @@ void solution(std::vector<S> &arr) {
   std::shuffle(arr.begin(), arr.end(), g);
 
   // 2. counting sort
-  constexpr int cntSize = maxRandom - minRandom + 1;
+  constexpr int cntSize = maxRandom - minRandom + 1;  // 101
   std::array<int, cntSize> cnt{};
   for (const auto& v : arr) {
     ++cnt[v.i - minRandom + 1];
