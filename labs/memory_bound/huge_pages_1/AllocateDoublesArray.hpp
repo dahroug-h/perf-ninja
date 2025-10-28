@@ -149,22 +149,41 @@ inline bool setRequiredPrivileges() {
 
 #endif
 
-// Allocate an array of doubles of size `size`, return it as a
-// std::unique_ptr<double[], D>, where `D` is a custom deleter type
+// // Allocate an array of doubles of size `size`, return it as a
+// // std::unique_ptr<double[], D>, where `D` is a custom deleter type
+// inline auto allocateDoublesArray(size_t size) {
+//   // Allocate memory
+//   double *alloc = new double[size];
+//   // remember to cast the pointer to double* if your allocator returns void*
+
+//   // Deleters can be conveniently defined as lambdas, but you can explicitly
+//   // define a class if you're not comfortable with the syntax
+//   auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+
+//   return std::unique_ptr<double[], decltype(deleter)>(alloc,
+//                                                       std::move(deleter));
+
+//   // The above is equivalent to:
+//   // return std::make_unique<double[]>(size);
+//   // The more verbose version is meant to demonstrate the use of a custom
+//   // (potentially stateful) deleter
+// }
+
 inline auto allocateDoublesArray(size_t size) {
-  // Allocate memory
-  double *alloc = new double[size];
-  // remember to cast the pointer to double* if your allocator returns void*
+  const size_t nbytes = size * sizeof(double);
+  void* ptr = mmap(NULL, nbytes, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  if (ptr == MAP_FAILED) {
+    std::cerr << "mmap failed. size=" << size << ", nbytes=" << nbytes << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+
+  madvise(ptr, nbytes, MADV_HUGEPAGE);
+
+  double *alloc = static_cast<double *>(ptr);
 
   // Deleters can be conveniently defined as lambdas, but you can explicitly
   // define a class if you're not comfortable with the syntax
-  auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+  auto deleter = [nbytes](double *ptr) { munmap(ptr, nbytes); };
 
-  return std::unique_ptr<double[], decltype(deleter)>(alloc,
-                                                      std::move(deleter));
-
-  // The above is equivalent to:
-  // return std::make_unique<double[]>(size);
-  // The more verbose version is meant to demonstrate the use of a custom
-  // (potentially stateful) deleter
+  return std::unique_ptr<double[], decltype(deleter)>(alloc, std::move(deleter));
 }
