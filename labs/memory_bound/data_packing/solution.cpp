@@ -12,9 +12,18 @@ void solution(std::vector<S> &arr) {
   // 2. counting sort
   constexpr int cntSize = maxRandom - minRandom + 1;  // 101
   std::array<int, cntSize> cnt{};
-  for (const auto& v : arr) {
-    ++cnt[v.i - minRandom + 1];
+  for (int k = 0; k < arr.size(); k += 4) {
+    ++cnt[arr[k].i - minRandom + 1];
+    ++cnt[arr[k + 1].i - minRandom + 1];
+    ++cnt[arr[k + 2].i - minRandom + 1];
+    ++cnt[arr[k + 3].i - minRandom + 1];
   }
+  for (int k = arr.size() / 4 * 4; k < arr.size(); ++k) {
+    ++cnt[arr[k].i - minRandom + 1];
+  }
+  // for (const auto& v : arr) {
+  //   ++cnt[v.i - minRandom + 1];
+  // }
   for (int i = 1; i < cntSize; ++i) {
     cnt[i] += cnt[i - 1];
   }
@@ -22,5 +31,6 @@ void solution(std::vector<S> &arr) {
   for (const auto& v : arr) {
     sorted[cnt[v.i - minRandom]++] = v;
   }
-  arr = sorted;
+  arr.swap(sorted);
+  // std::sort(arr.begin(), arr.end());
 }
