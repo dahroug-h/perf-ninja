@@ -10,11 +10,28 @@
 #define ON_WINDOWS
 #endif
 
-#if defined(ON_LINUX)
+#if defined(ON_LINUX) || defined(ON_MACOS)
 
-// HINT: allocate huge pages using mmap/munmap
-// NOTE: See HugePagesSetupTips.md for how to enable huge pages in the OS
 #include <sys/mman.h>
+
+template <typename T>
+struct HugePageAllocator {
+
+  static std::pair<T*, size_t> allocate(size_t n) {
+    const size_t size = n * sizeof(T);
+    void* ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (ptr == MAP_FAILED) {
+      std::cerr << "mmap failed. n=" << n << ", size=" << size << std::endl;
+      std::exit(EXIT_FAILURE);
+    }
+    madvise(ptr, size, MADV_HUGEPAGE);
+    return std::make_pair(static_cast<T*>(ptr), size);
+  }
+
+  static void deallocate(T* ptr, size_t size) {
+    munmap(ptr, size);
+  }
+};
 
 #elif defined(ON_WINDOWS)
 
@@ -147,43 +164,60 @@ inline bool setRequiredPrivileges() {
   }
 }
 
-#endif
 
-// // Allocate an array of doubles of size `size`, return it as a
-// // std::unique_ptr<double[], D>, where `D` is a custom deleter type
-// inline auto allocateDoublesArray(size_t size) {
-//   // Allocate memory
-//   double *alloc = new double[size];
-//   // remember to cast the pointer to double* if your allocator returns void*
+struct LargePagePrivileges {
+  LargePagePrivileges() {
+    setRequiredPrivileges();
+  }
+};
 
-//   // Deleters can be conveniently defined as lambdas, but you can explicitly
-//   // define a class if you're not comfortable with the syntax
-//   auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+static LargePagePrivileges large_page_privileges;
 
-//   return std::unique_ptr<double[], decltype(deleter)>(alloc,
-//                                                       std::move(deleter));
 
-//   // The above is equivalent to:
-//   // return std::make_unique<double[]>(size);
-//   // The more verbose version is meant to demonstrate the use of a custom
-//   // (potentially stateful) deleter
-// }
+inline std::string GetErrorAsString(DWORD errorMessageID)
+{
+    LPSTR messageBuffer = nullptr;
+    size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
-inline auto allocateDoublesArray(size_t size) {
-  const size_t nbytes = size * sizeof(double);
-  void* ptr = mmap(NULL, nbytes, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-  if (ptr == MAP_FAILED) {
-    std::cerr << "mmap failed. size=" << size << ", nbytes=" << nbytes << std::endl;
-    std::exit(EXIT_FAILURE);
+    std::string message(messageBuffer, size);
+
+    //Free the buffer.
+    LocalFree(messageBuffer);
+
+    return message;
+}
+
+
+template <typename T>
+struct HugePageAllocator {
+  static std::pair<T*, size_t> allocate(size_t n) {
+    size_t size = n * sizeof(T);
+    const size_t large_page_size = GetLargePageMinimum();
+    size_t npages = size / large_page_size;
+    if (size % large_page_size != 0)
+      npages++;
+    size = npages * large_page_size;
+    void* ptr = VirtualAlloc(NULL, size, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES, PAGE_READWRITE);
+    if (ptr == NULL) {
+      std::cerr << "VirtualAlloc failed. error: " << GetErrorAsString(GetLastError())
+        << "\nn=" << n << ", size=" << size << std::endl;
+      std::exit(EXIT_FAILURE);
+    }
+    return std::make_pair(static_cast<T*>(ptr), size);
   }
 
-  madvise(ptr, nbytes, MADV_HUGEPAGE);
+  static void deallocate(T* ptr, size_t size) {
+    VirtualFree(ptr, size, MEM_DECOMMIT);
+  }
+};
 
-  double *alloc = static_cast<double *>(ptr);
 
-  // Deleters can be conveniently defined as lambdas, but you can explicitly
-  // define a class if you're not comfortable with the syntax
-  auto deleter = [nbytes](double *ptr) { munmap(ptr, nbytes); };
+#endif
 
-  return std::unique_ptr<double[], decltype(deleter)>(alloc, std::move(deleter));
+inline auto allocateDoublesArray(size_t size) {
+  auto alloc = HugePageAllocator<double>::allocate(size);
+  auto deleter = [size=alloc.second](double *ptr) { HugePageAllocator<double>::deallocate(ptr, size); };
+  return std::unique_ptr<double[], decltype(deleter)>(alloc.first, std::move(deleter));
 }
+
