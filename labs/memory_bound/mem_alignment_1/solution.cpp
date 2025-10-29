@@ -9,7 +9,13 @@
 // In other words, it defines how many elements are in each row.
 // hint: you need to allocate dummy columns to achieve proper data alignment.
 int n_columns(int N) {  
-  return N;
+  int rowsize = N * sizeof(float);
+  if (rowsize < CACHELINE_SIZE)
+    return CACHELINE_SIZE / sizeof(float);
+  if (rowsize % CACHELINE_SIZE == 0)
+    return N;
+  int n = rowsize / CACHELINE_SIZE + 1;
+  return (n * CACHELINE_SIZE) / sizeof(float);
 }
 // ******************************************
 
