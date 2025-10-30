@@ -16,6 +16,11 @@ struct S {
   bool operator<(const S &s) const { return this->i < s.i; }
 };
 
+template <int N>
+class TD;
+
+//TD<sizeof(S)> td; // to check size of S at compile time but throws an error
+
 void init(std::vector<S> &arr);
 S create_entry(int first_value, int second_value);
 void solution(std::vector<S> &arr);
