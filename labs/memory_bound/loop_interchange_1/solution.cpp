@@ -24,15 +24,14 @@ void identity(Matrix &result) {
 
 // Multiply two square matrices
 void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
+  zero(result);
 
   for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      float sum = 0;
       for (int k = 0; k < N; k++) {
-        sum += a[i][k] * b[j][k];
+        for (int j = 0; j < N; j++) {
+        result[i][j] += a[i][k] * b[k][j];
       }
-      result[i][j] = sum;
-    }
+     }
   }
 }
 
