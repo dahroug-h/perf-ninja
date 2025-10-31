@@ -3,7 +3,7 @@
 
 bool solution(MatrixOfDoubles &in, MatrixOfDoubles &out) {
   int size = in.size();
-  const int TILE_SIZE = 32; // Adjust based on cache size
+  const int TILE_SIZE = 16; // Adjust based on cache size
 
 for (int ii = 0; ii < size; ii += TILE_SIZE) {
   for (int jj = 0; jj < size; jj += TILE_SIZE) {
