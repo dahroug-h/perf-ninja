@@ -28,7 +28,7 @@ public:
     void prefetch(int val) const {
         const int idx = val % N_Buckets;
 #if defined(_MSC_VER)
-        _mm_prefetch(reinterpret_cast<const char *>(&m_vector[idx]), _MM_HINT_NTA);
+        _mm_prefetch(reinterpret_cast<const char *>(&m_vector[idx]), 0);
 #else
         __builtin_prefetch(&m_vector[idx], 0, 0);
 #endif
