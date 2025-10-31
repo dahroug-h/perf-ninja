@@ -1,6 +1,5 @@
 
 #include "solution.h"
-#include <vector>
 #include <algorithm>
 #include <fstream>
 #include <ios>
@@ -30,16 +29,22 @@ static void filterVertically(uint8_t *output, const uint8_t *input,
       output[r * width + c] = static_cast<uint8_t>(value);
     }
 
-    alignas(64) std::vector<int> dot(height, 0);
-
-    for (int i = 0; i < radius * 2 + 1; i++) {
-      for (int r = radius; r < height - radius; r++) {
-          dot[r] += input[(r - radius + i) * width + c] * kernel[i];
-      }
-    }
-
+    // Middle part of computations with full kernel
     for (int r = radius; r < height - radius; r++) {
-      output[r * width + c] = static_cast<uint8_t>((dot[r] + rounding) >> shift);
+      const int prefetch_distance = 3;
+    int prefetch_row = r + prefetch_distance;
+    if (prefetch_row + radius < height)
+        __builtin_prefetch(&input[(prefetch_row + radius) * width + c], 0, 1);
+
+      // Accumulation
+      int dot = 0;
+      for (int i = 0; i < radius + 1 + radius; i++) {
+        dot += input[(r - radius + i) * width + c] * kernel[i];
+      }
+
+      // Fast shift instead of division
+      int value = (dot + rounding) >> shift;
+      output[r * width + c] = static_cast<uint8_t>(value);
     }
 
     // Bottom part of line, partial kernel
