@@ -31,6 +31,11 @@ static void filterVertically(uint8_t *output, const uint8_t *input,
 
     // Middle part of computations with full kernel
     for (int r = radius; r < height - radius; r++) {
+      const int prefetch_distance = 3;
+    int prefetch_row = r + prefetch_distance;
+    if (prefetch_row + radius < height)
+        __builtin_prefetch(&input[(prefetch_row + radius) * width + c], 0, 1);
+
       // Accumulation
       int dot = 0;
       for (int i = 0; i < radius + 1 + radius; i++) {
