@@ -153,11 +153,19 @@ inline bool setRequiredPrivileges() {
 // std::unique_ptr<double[], D>, where `D` is a custom deleter type
 inline auto allocateDoublesArray(size_t size) {
     size_t bytes = size * sizeof(double);
-    void *ptr = mmap(nullptr, bytes, PROT_READ | PROT_WRITE | PROT_EXEC,
-                MAP_PRIVATE | MAP_ANONYMOUS, -1 , 0);
-    if (ptr == MAP_FAILED) throw std::bad_alloc();
+
+#if defined(_WIN32)
+    double *alloc = new double[size];
+    auto deleter = [](double *p) { delete[] p; };
+    return std::unique_ptr<double[], decltype(deleter)>(alloc, deleter);
+#else
+    void *ptr = mmap(nullptr, bytes, PROT_READ | PROT_WRITE,
+                     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (ptr == MAP_FAILED)
+        throw std::bad_alloc();
     madvise(ptr, bytes, MADV_HUGEPAGE);
     auto deleter = [bytes](double *p) { if (p) munmap(p, bytes); };
     return std::unique_ptr<double[], decltype(deleter)>(
         reinterpret_cast<double*>(ptr), deleter);
+#endif
 }
