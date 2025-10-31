@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <stdlib.h>
 
-static int compare(const void *lhs, const void *rhs) {
+static inline int compare(const void *lhs, const void *rhs) {
   auto &a = *reinterpret_cast<const S *>(lhs);
   auto &b = *reinterpret_cast<const S *>(rhs);
 
@@ -23,5 +23,11 @@ static int compare(const void *lhs, const void *rhs) {
 }
 
 void solution(std::array<S, N> &arr) {
-  qsort(arr.data(), arr.size(), sizeof(S), compare);
+  // qsort(arr.data(), arr.size(), sizeof(S), compare);
+  std::sort(arr.begin(), arr.end(),
+    [](const S &lhs, const S &rhs) -> bool {
+      if (lhs.key1 != rhs.key1) return lhs.key1 < rhs.key1;
+      return lhs.key2 < rhs.key2;
+    }
+  );
 }
