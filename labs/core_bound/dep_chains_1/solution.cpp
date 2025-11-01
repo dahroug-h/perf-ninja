@@ -1,5 +1,6 @@
 #include "solution.hpp"
 #include <array>
+#include <algorithm>
 #include <iostream>
 
 unsigned getSumOfDigits(unsigned n) {
@@ -9,6 +10,38 @@ unsigned getSumOfDigits(unsigned n) {
     n = n / 10;
   }
   return sum;
+}
+
+template <int M>
+unsigned SolutionTemplate(List *l1, List *l2) {
+  unsigned retVal = 0;
+
+  List *head2 = l2;
+  while (l1) {
+    std::vector<unsigned> batch_values;
+    std::vector<bool> batch_found;
+    for (int i = 0; i < M; ++i) {
+      if (l1) {
+        batch_values.push_back(l1->value);
+        batch_found.push_back(false);
+        l1 = l1->next;
+      } else {
+        break;
+      }
+    }
+    l2 = head2;
+    while (l2) {
+      for (int i = 0; i < batch_values.size(); i++) {
+        if (l2->value == batch_values[i]) {
+          retVal += getSumOfDigits(batch_values[i]);
+          batch_found[i] = true;
+          break;
+        } 
+      }
+      l2 = l2->next;
+    }
+  }
+  return retVal;
 }
 
 // Task: lookup all the values from l2 in l1.
@@ -21,36 +54,5 @@ unsigned getSumOfDigits(unsigned n) {
 //       to get the node N+1 you need to retrieve the node N first.
 //       Think how you can execute multiple dependency chains in parallel.
 unsigned solution(List *l1, List *l2) {
-  unsigned retVal = 0;
-
-  List *head2 = l2;
-  // O(N^2) algorithm:
-  while (l1) {
-    unsigned v = l1->value;
-    bool l1_next_valid = (l1->next != nullptr);
-    unsigned v_next = (l1_next_valid) ? l1->next->value : 0;
-    l2 = head2;
-    bool v1_found = false;
-    bool v2_found = (l1_next_valid) ? false : true;
-    while (l2) {
-      if (l2->value == v) {
-        retVal += getSumOfDigits(v);
-        v1_found = true;
-      }
-      if (l1_next_valid && l2->value == v_next) {
-        retVal += getSumOfDigits(v_next);
-        v2_found = true;
-      }
-      if (v1_found && v2_found) {
-        break;
-      }
-      l2 = l2->next;
-    }
-    l1 = l1->next;
-    if (l1_next_valid) {
-      l1 = l1->next;
-    }
-  }
-
-  return retVal;
+  return SolutionTemplate<4>(l1, l2);
 }
