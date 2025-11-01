@@ -19,24 +19,26 @@ unsigned SolutionTemplate(List *l1, List *l2) {
   List *head2 = l2;
   while (l1) {
     std::vector<unsigned> batch_values;
-    std::vector<bool> batch_found;
     for (int i = 0; i < M; ++i) {
       if (l1) {
         batch_values.push_back(l1->value);
-        batch_found.push_back(false);
         l1 = l1->next;
       } else {
         break;
       }
     }
     l2 = head2;
+    int found = 0;
     while (l2) {
       for (int i = 0; i < batch_values.size(); i++) {
         if (l2->value == batch_values[i]) {
           retVal += getSumOfDigits(batch_values[i]);
-          batch_found[i] = true;
+          found++;
           break;
-        } 
+        }
+      }
+      if (found == batch_values.size()) {
+        break;
       }
       l2 = l2->next;
     }
