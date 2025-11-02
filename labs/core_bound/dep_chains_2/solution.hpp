@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstdint>
 #include <array>
-
+#include <vector>
 // The number of motion simulation steps.
 constexpr uint32_t STEPS = 10000;
 // The number of paticles to simulate.
@@ -53,14 +53,40 @@ constexpr float DEGREE_TO_RADIAN = (2 * PI_D) / UINT32_MAX;
 // Simulate the motion of the particles.
 // For every particle, we generate a random angle and move the particle
 // in the corresponding direction.
+// template <class RNG>
+// void randomParticleMotion(std::vector<Particle> &particles, uint32_t seed) {
+//   RNG rng(seed);  
+//   for (int i = 0; i < STEPS; i++)
+//     for (auto &p : particles) {
+//       uint32_t angle = rng.gen();
+//       float angle_rad = angle * DEGREE_TO_RADIAN;
+//       p.x += cosine(angle_rad) * p.velocity;
+//       p.y += sine(angle_rad) * p.velocity;
+//     }
+// }
+
 template <class RNG>
 void randomParticleMotion(std::vector<Particle> &particles, uint32_t seed) {
-  RNG rng(seed);  
-  for (int i = 0; i < STEPS; i++)
-    for (auto &p : particles) {
-      uint32_t angle = rng.gen();
-      float angle_rad = angle * DEGREE_TO_RADIAN;
-      p.x += cosine(angle_rad) * p.velocity;
-      p.y += sine(angle_rad) * p.velocity;
+  constexpr int unroll = 4;
+  uint32_t angles[unroll];
+  std::vector<RNG> rngs;
+  for (int i = 0; i < unroll; i++) {
+    rngs.push_back({seed});
+  }
+  for (int i = 0; i < STEPS; i++) {
+    for (int j = 0; j < particles.size()-unroll; j += unroll) {
+      for (int k = 0; k < unroll; k++) {
+        angles[k] = rngs[k].gen();
+        float angle_rad = angles[k] * DEGREE_TO_RADIAN;
+        particles[j+k].x += cosine(angle_rad) * particles[j+k].velocity;
+        particles[j+k].y += sine(angle_rad) * particles[j+k].velocity;        
+      }
     }
+    for (int r = particles.size()-unroll; r < particles.size(); r++) {
+      uint32_t angle = rngs[0].gen();
+      float angle_rad = angle * DEGREE_TO_RADIAN;
+      particles[r].x += cosine(angle_rad) * particles[r].velocity;
+      particles[r].y += sine(angle_rad) * particles[r].velocity;
+    }
+  }
 }
