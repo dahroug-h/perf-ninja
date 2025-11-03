@@ -149,81 +149,71 @@ inline bool setRequiredPrivileges() {
 
 #endif
 
+#ifdef ON_WINDOWS
+
+inline auto allocateDoublesArray(size_t size){
+  static const bool priviligesSet = setRequiredPrivileges();
+  if(!priviligesSet){
+    throw std::bad_alloc();
+  }
+
+  const SIZE_T pageSize = GetLargePageMinimum();
+  const auto nBytesRequested = size*sizeof(double);
+  const auto nPagesRequested = nBytesRequested/pageSize +
+                               ((nBytesRequested % pageSize)!=0);
+  const auto allocSize = nPagesRequested*pageSize;
+
+  auto alloc = VirtualAlloc(NULL, allocSize, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES, PAGE_READWRITE);
+  if(alloc == NULL){
+    throw std::bad_alloc();
+  }
+  auto deleter = [](double *ptr){
+    VirtualFree(ptr, 0, MEM_RELEASE);
+  };
+  return std::unique_ptr<double[], decltype(deleter)>(static_cast<double*>(alloc), deleter);
+}
+
+#elif defined (ON_LINUX)
 // Allocate an array of doubles of size `size`, return it as a
 // std::unique_ptr<double[], D>, where `D` is a custom deleter type
 inline auto allocateDoublesArray(size_t size) {
-  double *alloc = nullptr;
-  
-#if defined(__linux__)
-  // Linux: Use mmap with madvise for huge pages
-  size_t byte_size = size * sizeof(double);
-  alloc = static_cast<double*>(
-    mmap(nullptr, byte_size, PROT_READ | PROT_WRITE,
-         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)
-  );
-  
-  if (alloc == MAP_FAILED) {
-    throw std::bad_alloc();
-  }
-  
-  // Advise kernel to use huge pages for this region
-  madvise(alloc, byte_size, MADV_HUGEPAGE);
-  
-#elif defined(__APPLE__)
-  // macOS: Use vm_allocate with superpage alignment
-  size_t byte_size = size * sizeof(double);
-  // Align to 2MB boundary for huge pages
-  size_t aligned_size = (byte_size + (2 * 1024 * 1024 - 1)) & ~(2 * 1024 * 1024 - 1);
-  
-  alloc = static_cast<double*>(
-    mmap(nullptr, aligned_size, PROT_READ | PROT_WRITE,
-         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)
-  );
-  
-  if (alloc == MAP_FAILED) {
-    throw std::bad_alloc();
-  }
-  
-  // macOS will use superpages opportunistically for large aligned allocations
-  
-#elif defined(_WIN32)
-  // Windows: Use VirtualAlloc with large pages
-  size_t byte_size = size * sizeof(double);
-  alloc = static_cast<double*>(
-    VirtualAlloc(nullptr, byte_size, MEM_COMMIT | MEM_RESERVE | MEM_LARGE_PAGES,
-                 PAGE_READWRITE)
-  );
-  
-  if (!alloc) {
-    // Fall back to regular allocation if large pages fail
-    alloc = static_cast<double*>(
-      VirtualAlloc(nullptr, byte_size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)
-    );
-  }
-  
-  if (!alloc) {
-    throw std::bad_alloc();
-  }
-  
-#else
-  // Fallback for other platforms
-  alloc = new double[size];
-#endif
+  size *= sizeof(double);
 
-  // Custom deleter that knows how to free the memory
-  auto deleter = [size](double *ptr) {
-#if defined(__linux__) || defined(__APPLE__)
-    size_t byte_size = size * sizeof(double);
-#if defined(__APPLE__)
-    byte_size = (byte_size + (2 * 1024 * 1024 - 1)) & ~(2 * 1024 * 1024 - 1);
-#endif
-    munmap(ptr, byte_size);
-#elif defined(_WIN32)
-    VirtualFree(ptr, 0, MEM_RELEASE);
-#else
-    delete[] ptr;
-#endif
-  };
+  // Allocate full pages
+  constexpr size_t page_size = 1ul << 21; // 2MB
+  const auto pages_to_alloc = size / page_size + (size % page_size != 0);
+  size = pages_to_alloc * page_size;
 
-  return std::unique_ptr<double[], decltype(deleter)>(alloc, std::move(deleter));
+  const auto alloc = mmap(nullptr, size, PROT_READ | PROT_WRITE,
+                          MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
+  if (alloc == MAP_FAILED)
+    throw std::bad_alloc{};
+
+  auto deleter = [s = size](double *addr) { munmap(addr, s); };
+
+  return std::unique_ptr<double[], decltype(deleter)>(
+      static_cast<double *>(alloc), deleter);
 }
+
+#else
+// Allocate an array of doubles of size `size`, return it as a
+// std::unique_ptr<double[], D>, where `D` is a custom deleter type
+inline auto allocateDoublesArray(size_t size) {
+  // Allocate memory
+  double *alloc = new double[size];
+  // remember to cast the pointer to double* if your allocator returns void*
+
+  // Deleters can be conveniently defined as lambdas, but you can explicitly
+  // define a class if you're not comfortable with the syntax
+  auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+
+  return std::unique_ptr<double[], decltype(deleter)>(alloc,
+                                                      std::move(deleter));
+
+  // The above is equivalent to:
+  // return std::make_unique<double[]>(size);
+  // The more verbose version is meant to demonstrate the use of a custom
+  // (potentially stateful) deleter
+}
+
+#endif // ON_WINDOWS
