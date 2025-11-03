@@ -13,15 +13,22 @@
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
   alignas(64) std::array<uint32_t, 256> hist1;
   alignas(64) std::array<uint32_t, 256> hist2;
+  alignas(64) std::array<uint32_t, 256> hist3;
+  alignas(64) std::array<uint32_t, 256> hist4;
+
 
   hist1.fill(0);
   hist2.fill(0);
+  hist3.fill(0);
+  hist4.fill(0);
 
   int N = image.height * image.width;
   int i = 0;
-  for(; i <= N; i += 2) {
+  for(; i <= N; i += 4) {
     hist1[image.data[i]]++;
     hist2[image.data[i + 1]]++;
+    hist3[image.data[i + 2]]++;
+    hist4[image.data[i + 3]]++;
   }
 
   for(; i < N; ++i) {
@@ -30,6 +37,14 @@ std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
 
   for (int j = 0; j < hist1.size(); ++j) {
     hist1[j] += hist2[j];
+  }
+
+  for (int j = 0; j < hist1.size(); ++j) {
+    hist1[j] += hist3[j];
+  }
+
+  for (int j = 0; j < hist1.size(); ++j) {
+    hist1[j] += hist4[j];
   }
 
   return hist1;
