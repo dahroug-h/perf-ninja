@@ -9,7 +9,17 @@
 // In other words, it defines how many elements are in each row.
 // hint: you need to allocate dummy columns to achieve proper data alignment.
 int n_columns(int N) {  
-  return N;
+  if (N <= 0) return 0;
+
+  // Align rows to 64 bytes (cache line / good for AVX-512).
+  // sizeof(float) == 4 -> 64 / 4 = 16 floats per alignment unit.
+  constexpr int alignment_bytes = 64;
+  constexpr int bytes_per_elem = sizeof(float);
+  constexpr int elems_per_align = alignment_bytes / bytes_per_elem; // 16
+
+  // Round up N to the next multiple of elems_per_align
+  int K = ((N + elems_per_align - 1) / elems_per_align) * elems_per_align;
+  return K;
 }
 // ******************************************
 
