@@ -10,7 +10,7 @@
 // ONLY THE FOLLOWING FUNCTION IS BENCHMARKED
 // Compute the histogram of image pixels
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
-  std::array<uint32_t, 256> hist;
+  alignas(64) std::array<uint32_t, 256> hist;
   hist.fill(0);
   for (int i = 0; i < image.width * image.height; ++i)
     hist[image.data[i]]++;
