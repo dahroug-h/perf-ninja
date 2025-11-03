@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <array>
 
 constexpr int NumberOfGrids = 16;
 constexpr int GridXDimension = 1024;
@@ -42,6 +43,7 @@ public:
         //printCurrentGrid();
         int M = current.size();
         int N = current[0].size();
+        std::array<int, 9> rol;
         
         // Loop through every cell
         for(int i = 0; i < M; i++) {
@@ -62,25 +64,10 @@ public:
                 // its neighbours as it was counted before
                 aliveNeighbours -= current[i][j];
 
-                // Implementing the Rules of Life:
-                switch(aliveNeighbours) {
-                    // 1. Cell is lonely and dies
-                    case 0:
-                    case 1:
-                        future[i][j] = 0;
-                        break;                   
-                    // 2. Remains the same
-                    case 2:
-                        future[i][j] = current[i][j];
-                        break;
-                    // 3. A new cell is born
-                    case 3:
-                        future[i][j] = 1;
-                        break;
-                    // 4. Cell dies due to over population
-                    default:
-                        future[i][j] = 0;
-                }
+                rol = {0, 0, current[i][j], 1, 0,0,0,0,0};
+                
+                future[i][j] = rol[aliveNeighbours];
+
             }
         }
         std::swap(current, future);
