@@ -12,8 +12,27 @@
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
   alignas(64) std::array<uint32_t, 256> hist;
   hist.fill(0);
-  for (int i = 0; i < image.width * image.height; ++i)
-    hist[image.data[i]]++;
+
+  const uint8_t* ptr = image.data.get();
+  const size_t total = static_cast<size_t>(image.width) * image.height;
+
+  // Unroll the main loop to reduce branch overhead and increase ILP.
+  const size_t step = 8;
+  size_t i = 0;
+  for (; i + step - 1 < total; i += step) {
+    hist[ptr[i]]++;
+    hist[ptr[i + 1]]++;
+    hist[ptr[i + 2]]++;
+    hist[ptr[i + 3]]++;
+    hist[ptr[i + 4]]++;
+    hist[ptr[i + 5]]++;
+    hist[ptr[i + 6]]++;
+    hist[ptr[i + 7]]++;
+  }
+
+  for (; i < total; ++i)
+    hist[ptr[i]]++;
+
   return hist;
 }
 // ******************************************
