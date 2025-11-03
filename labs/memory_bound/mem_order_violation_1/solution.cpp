@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <cmath>
 #include <ios>
+#include <cstring>
 
 // ******************************************
 // ONLY THE FOLLOWING FUNCTION IS BENCHMARKED
@@ -12,8 +13,32 @@
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
   std::array<uint32_t, 256> hist;
   hist.fill(0);
-  for (int i = 0; i < image.width * image.height; ++i)
+
+  uint32_t tmp[256][8] = { 0 };
+  memset(&tmp, 0, sizeof(tmp));
+
+  size_t size = image.width * image.height / 8 * 8;
+  size_t i = 0;
+  while (i < size) {
+    tmp[image.data[i++]][0]++;
+    tmp[image.data[i++]][1]++;
+    tmp[image.data[i++]][2]++;
+    tmp[image.data[i++]][3]++;
+    tmp[image.data[i++]][4]++;
+    tmp[image.data[i++]][5]++;
+    tmp[image.data[i++]][6]++;
+    tmp[image.data[i++]][7]++;
+  }
+
+  for (size_t j = 0; j < 256; j++) {
+    hist[j] = tmp[j][0] + tmp[j][1] + tmp[j][2] + tmp[j][3] 
+          + tmp[j][4] + tmp[j][5] + tmp[j][6] + tmp[j][7];
+  }  
+
+  for (; i < image.width * image.height; ++i) {
     hist[image.data[i]]++;
+  }
+  
   return hist;
 }
 // ******************************************
