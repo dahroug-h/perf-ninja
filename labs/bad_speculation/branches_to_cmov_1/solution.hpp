@@ -64,10 +64,15 @@ public:
                 // its neighbours as it was counted before
                 aliveNeighbours -= current[i][j];
 
-                rol = {0, 0, current[i][j], 1, 0,0,0,0,0};
-                
-                future[i][j] = rol[aliveNeighbours];
+                auto cell = current[i][j];
 
+                if(__builtin_unpredictable(aliveNeighbours!=2)){
+                    cell = 0;
+                }
+                if(__builtin_unpredictable(aliveNeighbours==3)){
+                    cell = 1;
+                }
+                future[i][j] = cell;
             }
         }
         std::swap(current, future);
