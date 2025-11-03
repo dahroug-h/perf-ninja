@@ -151,26 +151,26 @@ inline bool setRequiredPrivileges() {
 
 #ifdef ON_WINDOWS
 
-inline auto allocateDoublesArray(size_t size){
-  static const bool priviligesSet = setRequiredPrivileges();
-  if(!priviligesSet){
-    throw std::bad_alloc();
-  }
+inline auto allocateDoublesArray(size_t size) {
+  static const bool privileges_set = setRequiredPrivileges();
+  if (!privileges_set)
+    throw std::bad_alloc{};
 
-  const SIZE_T pageSize = GetLargePageMinimum();
-  const auto nBytesRequested = size*sizeof(double);
-  const auto nPagesRequested = nBytesRequested/pageSize +
-                               ((nBytesRequested % pageSize)!=0);
-  const auto allocSize = nPagesRequested*pageSize;
+  const SIZE_T page_size = GetLargePageMinimum();
+  const auto n_bytes_requested = size * sizeof(double);
+  const auto n_pages_requested =
+      n_bytes_requested / page_size + (n_bytes_requested % page_size != 0);
+  const auto alloc_size = n_pages_requested * page_size;
 
-  auto alloc = VirtualAlloc(NULL, allocSize, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES, PAGE_READWRITE);
-  if(alloc == NULL){
-    throw std::bad_alloc();
-  }
-  auto deleter = [](double *ptr){
-    VirtualFree(ptr, 0, MEM_RELEASE);
-  };
-  return std::unique_ptr<double[], decltype(deleter)>(static_cast<double*>(alloc), deleter);
+  auto alloc =
+      VirtualAlloc(NULL, alloc_size, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES,
+                   PAGE_READWRITE);
+  if (!alloc)
+    throw std::bad_alloc{};
+
+  auto deleter = [](double *ptr) { VirtualFree(ptr, 0, MEM_RELEASE); };
+  return std::unique_ptr<double[], decltype(deleter)>(
+      static_cast<double *>(alloc), deleter);
 }
 
 #elif defined (ON_LINUX)
