@@ -1,23 +1,19 @@
 #include "solution.hpp"
 #include <cstdint>
 
-int buckets[100] = {0,0,0,0,0,0,0,0,0,0,0,0,0,
+uint8_t buckets[101] = {0,0,0,0,0,0,0,0,0,0,0,0,0,
                               1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                               2,2,2,2,2,2,2,2,2,2,2,2,
                               3,3,3,3,3,3,3,3,3,3,3,3,
                               4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
                               5,5,5,5,5,5,5,5,5,5,5,5,
-                              6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6};
+                              6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6, DEFAULT_BUCKET};
 
 
 static std::size_t mapToBucket(std::size_t v) {
                               //   size of a bucket
-  // if (v < 100)
-  //   return buckets[v];
-
-  if (v < sizeof(buckets)/sizeof(int)) return buckets[v];
-
-  return DEFAULT_BUCKET;
+  constexpr auto n = sizeof(buckets)/sizeof(uint8_t);
+  return buckets[std::min(v, n-1)];
 }
 
 std::array<std::size_t, NUM_BUCKETS> histogram(const std::vector<int> &values) {
