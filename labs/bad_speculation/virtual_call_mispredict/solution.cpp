@@ -8,19 +8,13 @@ void generateObjects(InstanceArray& array) {
 
     for (std::size_t i = 0; i < N; i++) {
         int value = distribution(generator);
-        
-        BaseClass *obj = nullptr;
-
         if (value == 0) {
-            obj = new ClassA();
+            array.push_back(std::make_unique<ClassA>());
         } else if (value == 1) {
-            obj = new ClassB();
+            array.push_back(std::make_unique<ClassB>());
         } else {
-            obj = new ClassC();
+            array.push_back(std::make_unique<ClassC>());
         }
-
-        array.push_back(std::unique_ptr<BaseClass>(obj));
-    
     }
 }
 
