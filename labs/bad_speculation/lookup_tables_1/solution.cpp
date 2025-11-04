@@ -1,18 +1,7 @@
 #include "solution.hpp"
 #include <cstdint>
 
-static std::size_t mapToBucket(std::size_t v) {
-                              //   size of a bucket
-  if      (v < 13)  return 0; //   13
-  else if (v < 29)  return 1; //   16
-  else if (v < 41)  return 2; //   12
-  else if (v < 53)  return 3; //   12
-  else if (v < 71)  return 4; //   18
-  else if (v < 83)  return 5; //   12
-  else if (v < 100) return 6; //   17
-  return DEFAULT_BUCKET;
-
-  uint8_t bucketSizes[100] = {0,0,0,0,0,0,0,0,0,0,0,0,0,
+uint8_t buckets[100] = {0,0,0,0,0,0,0,0,0,0,0,0,0,
                               1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                               2,2,2,2,2,2,2,2,2,2,2,2,
                               3,3,3,3,3,3,3,3,3,3,3,3,
@@ -20,8 +9,15 @@ static std::size_t mapToBucket(std::size_t v) {
                               5,5,5,5,5,5,5,5,5,5,5,5,
                               6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6};
 
+
+static std::size_t mapToBucket(std::size_t v) {
+                              //   size of a bucket
   if (v < 100)
-    return bucketSizes[v];
+    return buckets[v];
+
+  // if (v < sizeof(buckets)/sizeof(uint8_t)){
+  //   return buckets[v];
+  // }
 
   return DEFAULT_BUCKET;
 }
