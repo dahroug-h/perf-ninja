@@ -34,102 +34,64 @@ void imageSmoothing(const InputVector &input, uint8_t radius,
   limit = size - radius;
 
   #if defined (USE_X86_SIMD) && defined (__AVX2__)
-    // Process 8 elements at a time (reduced from 16 for better performance)
-    for(; pos + 8 <= limit; pos += 8){
-      // Load and convert to int16
-      __m128i sub_u8 = _mm_loadl_epi64((__m128i*)&input[pos - radius - 1]);
-      __m128i sub = _mm_cvtepu8_epi16(sub_u8);
+ const uint8_t* subtractPtr = input.data() + pos - radius - 1;
+  const uint8_t* addPtr = input.data() + pos + radius;
+  const uint16_t* outputPtr = output.data() + pos;
+  __m128i current = _mm_set1_epi16(currentSum);
 
-      __m128i add_u8 = _mm_loadl_epi64((__m128i*)&input[pos + radius]);
-      __m128i add = _mm_cvtepu8_epi16(add_u8);
+  int i = 0;
+  // loop processes 8 elements per iteration
+  for (; i + UNROLL - 1 < limit - pos; i += UNROLL) {
+    // 1. Calculate vector diff: input[i+radius] - input[i-radius-1]
+    __m128i sub_u8 = _mm_loadu_si64(subtractPtr + i);
+    __m128i sub = _mm_cvtepu8_epi16(sub_u8);
+    __m128i add_u8 = _mm_loadu_si64(addPtr + i);
+    __m128i add = _mm_cvtepu8_epi16(add_u8);
 
-      __m128i deltas = _mm_sub_epi16(add, sub);
+    __m128i diff = _mm_sub_epi16(add, sub);
 
-      // Convert to 32-bit for safe accumulation
-      __m128i zero = _mm_setzero_si128();
-      __m128i mask = _mm_cmpgt_epi16(zero, deltas);
-      __m128i deltas_lo = _mm_unpacklo_epi16(deltas, mask);
-      __m128i deltas_hi = _mm_unpackhi_epi16(deltas, mask);
+    // 2. Calculate vector prefix sum for 8 elements
+    __m128i s = _mm_add_epi16(diff, _mm_slli_si128(diff, 2));
+    s = _mm_add_epi16(s, _mm_slli_si128(s, 4));
+    s = _mm_add_epi16(s, _mm_slli_si128(s, 8));
 
-      // Parallel prefix sum (scan) within vector
-      // This computes cumulative sums: [d0, d0+d1, d0+d1+d2, d0+d1+d2+d3]
-      __m128i sum_lo = deltas_lo;
-      __m128i sum_hi = deltas_hi;
-      
-      // Prefix sum using shift and add
-      __m128i temp;
-      temp = _mm_slli_si128(sum_lo, 4);
-      sum_lo = _mm_add_epi32(sum_lo, temp);
-      temp = _mm_slli_si128(sum_lo, 8);
-      sum_lo = _mm_add_epi32(sum_lo, temp);
-      
-      temp = _mm_slli_si128(sum_hi, 4);
-      sum_hi = _mm_add_epi32(sum_hi, temp);
-      temp = _mm_slli_si128(sum_hi, 8);
-      sum_hi = _mm_add_epi32(sum_hi, temp);
-      
-      // Add the last element of sum_lo to all elements of sum_hi
-      __m128i carry = _mm_shuffle_epi32(sum_lo, _MM_SHUFFLE(3,3,3,3));
-      sum_hi = _mm_add_epi32(sum_hi, carry);
-      
-      // Add currentSum to all elements
-      __m128i base = _mm_set1_epi32(currentSum);
-      sum_lo = _mm_add_epi32(sum_lo, base);
-      sum_hi = _mm_add_epi32(sum_hi, base);
-      
-      // Pack back to 16-bit and store
-      __m128i result = _mm_packus_epi32(sum_lo, sum_hi);
-      _mm_storeu_si128((__m128i*)&output[pos], result);
-      
-      // Update currentSum for next iteration
-      alignas(16) int32_t last[4];
-      _mm_store_si128((__m128i*)last, sum_hi);
-      currentSum = last[3];
-    }
+    // 3. Store the result
+    __m128i result = _mm_add_epi16(s, current);
+    _mm_storeu_si128((__m128i*)(outputPtr + i), result);
 
+    // 4. Broadcast currentSum for the next iteration
+    currentSum = (uint16_t)_mm_extract_epi16(result, 7);
+    current = _mm_set1_epi16(currentSum);
+  }
+  pos += i;
   #elif defined (USE_ARM_NEON)
-    // Process 8 elements at a time with parallel prefix sum
-    for(; pos + 8 <= limit; pos += 8){
-      uint8x8_t sub_u8 = vld1_u8(&input[pos - radius - 1]);
-      int16x8_t sub = vreinterpretq_s16_u16(vmovl_u8(sub_u8));
+// ARM solution by Jonathan Hallström
+  for (; pos + UNROLL - 1 < limit; pos += UNROLL) {
 
-      uint8x8_t add_u8 = vld1_u8(&input[pos + radius]);
-      int16x8_t add = vreinterpretq_s16_u16(vmovl_u8(add_u8));
+    uint16_t add[UNROLL]{};
 
-      int16x8_t deltas = vsubq_s16(add, sub);
+    for (int i = 0; i < UNROLL; ++i)
+      add[i] = input[i + pos + radius] - input[i + pos - radius - 1];
 
-      // Convert to 32-bit
-      int32x4_t deltas_lo = vmovl_s16(vget_low_s16(deltas));
-      int32x4_t deltas_hi = vmovl_s16(vget_high_s16(deltas));
+    // basically want it to do this:
+    // for (int i = 1; i < UNROLL; ++i) 
+    //   add[i] += add[i - 1];
 
-      // Parallel prefix sum using pairwise adds
-      // Step 1: [d0, d0+d1, d2, d2+d3]
-      int32x4_t sum_lo = deltas_lo;
-      int32x4_t sum_hi = deltas_hi;
-      
-      sum_lo = vaddq_s32(sum_lo, vextq_s32(vdupq_n_s32(0), sum_lo, 3));
-      sum_lo = vaddq_s32(sum_lo, vextq_s32(vdupq_n_s32(0), sum_lo, 2));
-      
-      sum_hi = vaddq_s32(sum_hi, vextq_s32(vdupq_n_s32(0), sum_hi, 3));
-      sum_hi = vaddq_s32(sum_hi, vextq_s32(vdupq_n_s32(0), sum_hi, 2));
-      
-      // Add carry from sum_lo to sum_hi
-      int32_t carry = vgetq_lane_s32(sum_lo, 3);
-      sum_hi = vaddq_s32(sum_hi, vdupq_n_s32(carry));
-      
-      // Add currentSum base
-      sum_lo = vaddq_s32(sum_lo, vdupq_n_s32(currentSum));
-      sum_hi = vaddq_s32(sum_hi, vdupq_n_s32(currentSum));
-      
-      // Pack and store
-      uint16x4_t result_lo = vqmovun_s32(sum_lo);
-      uint16x4_t result_hi = vqmovun_s32(sum_hi);
-      vst1_u16(&output[pos], result_lo);
-      vst1_u16(&output[pos + 4], result_hi);
-      
-      // Update currentSum
-      currentSum = vgetq_lane_s32(sum_hi, 3);
-    }
+    uint16x8_t result = vld1q_u16(add);
+    result = vaddq_u16(result, vextq_u16(vdupq_n_s16(0), result, 8 - 1));
+    result = vaddq_u16(result, vextq_u16(vdupq_n_s16(0), result, 8 - 2));
+    result = vaddq_u16(result, vextq_u16(vdupq_n_s16(0), result, 8 - 4));
+    vst1q_u16(add, result);
+
+    uint16_t vals[UNROLL];
+    for (int i = 0; i < UNROLL; ++i)
+        vals[i] = currentSum + add[i];
+
+    for (int i = 0; i < UNROLL; ++i) 
+      output[pos + i] = vals[i];
+
+    currentSum += add[UNROLL - 1];
+  }
   #endif
 
   for (; pos < limit; ++pos) {
