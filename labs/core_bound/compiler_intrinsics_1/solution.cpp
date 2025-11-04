@@ -12,6 +12,8 @@
   #define USE_ARM_NEON
 #endif
 
+constexpr int UNROLL = 8;
+
 void imageSmoothing(const InputVector &input, uint8_t radius,
                     OutputVector &output) {
   int pos = 0;
