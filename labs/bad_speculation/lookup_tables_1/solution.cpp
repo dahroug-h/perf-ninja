@@ -12,12 +12,12 @@ uint8_t buckets[100] = {0,0,0,0,0,0,0,0,0,0,0,0,0,
 
 static std::size_t mapToBucket(std::size_t v) {
                               //   size of a bucket
-  if (v < 100)
-    return buckets[v];
-
-  // if (v < sizeof(buckets)/sizeof(uint8_t)){
+  // if (v < 100)
   //   return buckets[v];
-  // }
+
+  if (v < sizeof(buckets)/sizeof(uint8_t)){
+    return buckets[v];
+  }
 
   return DEFAULT_BUCKET;
 }
