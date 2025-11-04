@@ -6,12 +6,9 @@ std::size_t select(std::array<S, N> &output, const std::array<S, N> &input,
                    const std::uint32_t lower, const std::uint32_t upper) {
   std::size_t count = 0;
   for (const auto item : input) {
-
-    auto condition = (lower <= item.first) && (item.first <= upper);
-
-    output[count] = condition ? item : output[count];
-    count = condition ? count + 1 : count;
+    if ((lower <= item.first) && (item.first <= upper)) {
+      output[count++] = item;
+    }
   }
-
   return count;
 }
