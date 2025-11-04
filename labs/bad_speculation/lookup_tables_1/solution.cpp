@@ -1,7 +1,7 @@
 #include "solution.hpp"
 #include <cstdint>
 
-uint8_t buckets[100] = {0,0,0,0,0,0,0,0,0,0,0,0,0,
+int buckets[100] = {0,0,0,0,0,0,0,0,0,0,0,0,0,
                               1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                               2,2,2,2,2,2,2,2,2,2,2,2,
                               3,3,3,3,3,3,3,3,3,3,3,3,
@@ -15,9 +15,7 @@ static std::size_t mapToBucket(std::size_t v) {
   // if (v < 100)
   //   return buckets[v];
 
-  if (v < sizeof(buckets)/sizeof(uint8_t)){
-    return buckets[v];
-  }
+  if (v < sizeof(buckets)/sizeof(int)) return buckets[v];
 
   return DEFAULT_BUCKET;
 }
