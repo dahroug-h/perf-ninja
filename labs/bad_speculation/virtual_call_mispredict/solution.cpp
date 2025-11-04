@@ -8,12 +8,17 @@ void generateObjects(InstanceArray& array) {
 
     for (std::size_t i = 0; i < N; i++) {
         int value = distribution(generator);
-        if (value == 0) {
-            array.push_back(std::make_unique<ClassA>());
-        } else if (value == 1) {
-            array.push_back(std::make_unique<ClassB>());
-        } else {
-            array.push_back(std::make_unique<ClassC>());
+
+        switch (value) {
+            case 0:
+                array.push_back(std::make_unique<ClassA>());
+                break;
+            case 1:
+                array.push_back(std::make_unique<ClassB>());
+                break;
+            default:
+                array.push_back(std::make_unique<ClassC>());
+                break;
         }
     }
 }
