@@ -2,12 +2,31 @@
 #include <algorithm>
 
 #ifdef __x86_64__
-#include <immintrin.h>
+  #include <immintrin.h>
 #elif defined(__aarch64__) || defined(_M_ARM64)
-#include <arm_neon.h>
-#elif defined(__riscv) || defined(__riscv__) || defined(__riscv64__)
-#include <riscv_vector.h>
+  #include <arm_neon.h>
+#elif defined(__riscv) || defined(__riscv__) || defined(__riscv64)
+  #include <riscv_vector.h>
 #endif
+
+// The solution that we present here is "readable" (explicit) but not necessary the best performant.
+
+// The first issue is that it does not adapt well to every microarchitecture. For example,
+// we need to have enough vector accumulators to maximize execution throughput. This solution
+// has fixed number of accumulators, which may not scale well with future microarchitectures.
+// More generic solution (by Jonathan Hallström) can be found here: 
+// https://github.com/dendibakh/perf-ninja/tree/compiler_intrinsics_3_solution
+
+// Also, we can make it even faster if we don't extend 32 bits into 64 bits, 
+// but do 32-bit unsinged additions and count overflows (wraparounds). E.g.:
+// uint32_t x = 0;
+// uint32_t x_ovflw = 0;
+// ...
+//   x += input[i].x;
+//   if (x < input[i].x)
+//     x_ovflw += 1; // wraparound happend
+// When this code is expressed in vector form, it becomes faster than the presented solution 
+// thanks to 2x improved addition throughput: we add vectors of 32-bit vectors instead of 64-bit vectors.
 
 Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &input) {
   std::uint64_t x = 0;
@@ -15,12 +34,11 @@ Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &inp
   std::uint64_t z = 0;
 
   int i = 0;
-  #ifdef __x86_64__
-
+#ifdef __x86_64__
   __m256i acc_XYZX = _mm256_setzero_si256();
   __m256i acc_YZXY = _mm256_setzero_si256();
   __m256i acc_ZXYZ = _mm256_setzero_si256();
-
+  // we will process 4 Positions per iteration (4 * 12 bytes or 3 * sizeof(XMM) )
   constexpr int UNROLL = 4;
   auto input_ptr = reinterpret_cast<const __m128i *>(&input[0].x);
   for (; i + UNROLL - 1 < input.size(); i += UNROLL) {
@@ -36,6 +54,11 @@ Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &inp
     acc_ZXYZ = _mm256_add_epi64(acc_ZXYZ, YMM_ZXYZ);
   }
 
+  // Perhaps this naive reduction can be improved with vpermq or similar,
+  // but does it really matter? Perhaps you would see no difference
+  // since this code not in the hot loop.
+
+  // reduce acc_XYZX
   x += _mm256_extract_epi64(acc_XYZX, 0);
   y += _mm256_extract_epi64(acc_XYZX, 1);
   z += _mm256_extract_epi64(acc_XYZX, 2);
@@ -52,26 +75,28 @@ Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &inp
   x += _mm256_extract_epi64(acc_ZXYZ, 1);
   y += _mm256_extract_epi64(acc_ZXYZ, 2);
   z += _mm256_extract_epi64(acc_ZXYZ, 3);
-
-  #elif defined(__aarch64__) || defined(_M_ARM64)
-
+#elif defined(__aarch64__) || defined(_M_ARM64)
   uint64x2_t acc_XY1 = vdupq_n_u64(0);
   uint64x2_t acc_ZX1 = vdupq_n_u64(0);
   uint64x2_t acc_YZ1 = vdupq_n_u64(0);
-
   uint64x2_t acc_XY2 = vdupq_n_u64(0);
   uint64x2_t acc_ZX2 = vdupq_n_u64(0);
   uint64x2_t acc_YZ2 = vdupq_n_u64(0);
-
   uint64x2_t acc_XY3 = vdupq_n_u64(0);
   uint64x2_t acc_ZX3 = vdupq_n_u64(0);
   uint64x2_t acc_YZ3 = vdupq_n_u64(0);
-  
   uint64x2_t acc_XY4 = vdupq_n_u64(0);
   uint64x2_t acc_ZX4 = vdupq_n_u64(0);
-  uint64x2_t acc_YZ4 = vdupq_n_u64(0);
-
+  uint64x2_t acc_YZ4 = vdupq_n_u64(0);  
+  // Apple M1 needs 8 accumulators to achieve maximum throughput.
+  // We have dependent uaddw.2d instructions in the loop.
+  // Accodring to https://dougallj.github.io/applecpu/firestorm-simd.html,
+  // uaddw.2d throughput is 4 per cycle and latency is 2, 
+  // thus we need 2 * 4 accumulators for maximum performance.
+  // For our algorithm, it is easier to have 12 accumulators.
+  // we will process 8 Positions per iteration (8 * 12 bytes or 12 * sizeof(std::uint64_t) )
   constexpr int UNROLL = 8;
+  auto input_ptr = reinterpret_cast<const std::uint64_t *>(&input[0].x);
   for (; i + UNROLL - 1 < input.size(); i += UNROLL) {
     uint32x2_t XY1 = vld1_u64(input_ptr + 0); // load 64 bits
     uint32x2_t ZX1 = vld1_u64(input_ptr + 1); 
@@ -111,6 +136,7 @@ Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &inp
     acc_ZX4 = vaddq_u64(acc_ZX4, eZX4);     
     acc_YZ4 = vaddq_u64(acc_YZ4, eYZ4);     
   }
+
   // Maybe this reduction can be improved but perhaps it would not make a difference.
   uint64x2_t acc_XY = vaddq_u64(vaddq_u64(acc_XY1, acc_XY2), vaddq_u64(acc_XY3, acc_XY4));
   uint64x2_t acc_ZX = vaddq_u64(vaddq_u64(acc_ZX1, acc_ZX2), vaddq_u64(acc_ZX3, acc_ZX4));
@@ -176,13 +202,13 @@ Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &inp
   y += __riscv_vmv_x_s_u64m2_u64(acc_ZXYZ);
   acc_ZXYZ = __riscv_vslide1down_vx_u64m2(acc_ZXYZ, 0, 4);
   z += __riscv_vmv_x_s_u64m2_u64(acc_ZXYZ);
-  #endif
+#endif
 
-  //remainder
-  for (auto pos: input) {
-    x += pos.x;
-    y += pos.y;
-    z += pos.z;
+  // remainder
+  for (; i < input.size(); ++i) {
+      x += input[i].x;
+      y += input[i].y;
+      z += input[i].z;
   }
 
   return {
