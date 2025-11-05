@@ -1,114 +1,66 @@
 #include "solution.hpp"
+#include <iostream>
+#include <immintrin.h>
+#include <stdint.h>
 
-#if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
-#include <emmintrin.h> // SSE2
-#define USE_X86_INTRINSICS
-#elif defined(__ARM_NEON) || defined(__aarch64__)
-#include <arm_neon.h>
-#define USE_ARM_NEON
-#endif
-
-// Find the longest line in a file using SIMD intrinsics
-unsigned solution_intrinsics(const std::string &inputContents) {
-  const char *data = inputContents.data();
-  size_t size = inputContents.size();
-  unsigned longestLine = 0;
+// Find the longest line in a file using x86 intrinsics.
+uint32_t solution(const std::string &inputContents) {
+  uint32_t longestLine = 0;
   unsigned curLineLength = 0;
-  
-  size_t i = 0;
-  
-#ifdef USE_X86_INTRINSICS
-  // Process 16 bytes at a time using SSE2
-  const size_t simd_width = 16;
-  const __m128i newline_vec = _mm_set1_epi8('\n'); // creating mask with eol character
-  
-  while (i + simd_width <= size) {
-    // Load 16 characters
-    __m128i chars = _mm_loadu_si128(reinterpret_cast<const __m128i*>(data + i)); // loads chunk of text
-    
-    // Compare with newline character
-    __m128i cmp = _mm_cmpeq_epi8(chars, newline_vec); // vector compare
-    int mask = _mm_movemask_epi8(cmp);
-    
-    if (mask == 0) {
-      // No newlines in this chunk
-      curLineLength += simd_width;
-      i += simd_width;
-    } else {
-      // Process each byte in the chunk
-      for (size_t j = 0; j < simd_width; ++j) {
-        if (data[i] == '\n') {
-          longestLine = (curLineLength > longestLine) ? curLineLength : longestLine;
-          curLineLength = 0;
-        } else {
-          curLineLength++;
-        }
-        i++;
+  uint32_t pos = 0;
+  auto strLength = inputContents.size();
+  if (strLength >= 32) { // size of YMM vector
+    const __m256i eol = _mm256_set1_epi8('\n');
+    auto *buffer = inputContents.data();
+    uint32_t curLineBegin = 0;
+    for (; pos + 32 < strLength; pos += 32) {
+      // Load the next 32-byte chunk of the input string.
+      __m256i vect = _mm256_loadu_si256((const __m256i *)buffer);
+      // Check every character in this chunk. Get the result of the
+      // comparison back as a vector mask.
+      __m256i vectMask = _mm256_cmpeq_epi8(vect, eol);
+      // Convert the vector mask into the 32-bit integer representation.
+      uint32_t mask = _mm256_movemask_epi8(vectMask);
+      while (mask) {
+        // Find the position of the trailing '1' bit.
+        // Requires BMI1 x86-ISA extention
+        int maskPos = _tzcnt_u32(mask);
+
+        // Compute the length of the current string.
+        uint32_t curLineLength = (pos - curLineBegin) + maskPos;
+        if (pos < curLineBegin)
+          curLineLength = maskPos;
+
+        // Set the beginning of the next line to the next character after the
+        // line separator
+        curLineBegin += curLineLength + 1;
+
+        // Is this line the longest?
+        longestLine = std::max(curLineLength, longestLine);
+
+        // Shift the mask to check if we have more line separators
+        ++maskPos;
+        if (maskPos > 31) // Shifting 32-bit integer by 32 positions is an UB.
+          break;
+        else
+          mask >>= maskPos;
       }
+      // Advance the pointer to the next 32-byte input chunk.
+      buffer += 32;
     }
+    // Calculate the length of the current line.
+    curLineLength = pos - curLineBegin;
   }
-  
-#elif defined(USE_ARM_NEON)
-  // Process 16 bytes at a time using NEON
-  const size_t simd_width = 16;
-  const uint8x16_t newline_vec = vdupq_n_u8('\n');
-  
-  while (i + simd_width <= size) {
-    // Load 16 characters
-    uint8x16_t chars = vld1q_u8(reinterpret_cast<const uint8_t*>(data + i));
-    
-    // Compare with newline character
-    uint8x16_t cmp = vceqq_u8(chars, newline_vec);
-    
-    // Check if any newlines found
-    uint64x2_t cmp64 = vreinterpretq_u64_u8(cmp);
-    uint64_t cmp_or = vgetq_lane_u64(cmp64, 0) | vgetq_lane_u64(cmp64, 1);
-    
-    if (cmp_or == 0) {
-      // No newlines in this chunk
-      curLineLength += simd_width;
-      i += simd_width;
-    } else {
-      // Process each byte in the chunk
-      for (size_t j = 0; j < simd_width; ++j) {
-        if (data[i] == '\n') {
-          longestLine = (curLineLength > longestLine) ? curLineLength : longestLine;
-          curLineLength = 0;
-        } else {
-          curLineLength++;
-        }
-        i++;
-      }
-    }
-  }
-#endif
-  
-  // Process remaining bytes
-  while (i < size) {
-    if (data[i] == '\n') {
-      longestLine = (curLineLength > longestLine) ? curLineLength : longestLine;
+  // This loop processes the remaining characters sequentially.
+  for (; pos < strLength; pos++) {
+    if (inputContents[pos] == '\n') {
+      longestLine = std::max(curLineLength, longestLine);
       curLineLength = 0;
     } else {
       curLineLength++;
     }
-    i++;
   }
-  
-  // Handle final line if it doesn't end with newline
-  longestLine = (curLineLength > longestLine) ? curLineLength : longestLine;
-  
+  // if no end-of-line in the end
+  longestLine = std::max(curLineLength, longestLine);
   return longestLine;
-}
-
-// Original implementation kept for reference
-unsigned solution(const std::string &inputContents) {
-  // unsigned longestLine = 0;
-  // unsigned curLineLength = 0;
-
-  // for (auto s : inputContents) {
-  //   curLineLength = (s == '\n') ? 0 : curLineLength + 1;
-  //   longestLine = std::max(curLineLength, longestLine);
-  // }
-
-  return solution_intrinsics(inputContents);
 }
