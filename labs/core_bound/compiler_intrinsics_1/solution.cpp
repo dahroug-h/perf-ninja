@@ -4,12 +4,10 @@
 #include <cstdint>
 #include <vector>
 
-#if defined(__x86_64) || defined (_M_X64)
+#ifdef __x86_64__
   #include <immintrin.h>
-  #define USE_X86_SIMD
-#elif defined(__aarch64__) || defined(_M_ARM64)
+#else
   #include <arm_neon.h>
-  #define USE_ARM_NEON
 #endif
 
 constexpr int UNROLL = 8;
@@ -35,7 +33,7 @@ void imageSmoothing(const InputVector &input, uint8_t radius,
 // 2. main loop.
   limit = size - radius;
 
-  #if defined (USE_X86_SIMD) && defined (__AVX2__)
+  #ifdef __x86_64__
  const uint8_t* subtractPtr = input.data() + pos - radius - 1;
   const uint8_t* addPtr = input.data() + pos + radius;
   const uint16_t* outputPtr = output.data() + pos;
@@ -53,8 +51,8 @@ void imageSmoothing(const InputVector &input, uint8_t radius,
     __m128i diff = _mm_sub_epi16(add, sub);
 
     // 2. Calculate vector prefix sum for 8 elements
-    __m128i s = _mm_add_epi16(diff, _mm_slli_si128(diff, 2));
-    s = _mm_add_epi16(s, _mm_slli_si128(s, 4));
+    __m128i s = _mm_add_epi16(diff, _mm_slli_si128(diff, 2)); //shifted by one element
+    s = _mm_add_epi16(s, _mm_slli_si128(s, 4)); //shifted by two elements
     s = _mm_add_epi16(s, _mm_slli_si128(s, 8));
 
     // 3. Store the result
@@ -66,7 +64,7 @@ void imageSmoothing(const InputVector &input, uint8_t radius,
     current = _mm_set1_epi16(currentSum);
   }
   pos += i;
-  #elif defined (USE_ARM_NEON)
+  #else
 // ARM solution by Jonathan Hallström
   for (; pos + UNROLL - 1 < limit; pos += UNROLL) {
 
