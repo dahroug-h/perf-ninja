@@ -1,7 +1,7 @@
 #include "solution.hpp"
 
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
-#include <emmintrin.h> // SSE2
+#include <immintrin.h> // AVX2
 #define USE_X86_INTRINSICS
 #elif defined(__ARM_NEON) || defined(__aarch64__)
 #include <arm_neon.h>
@@ -18,17 +18,17 @@ unsigned solution_intrinsics(const std::string &inputContents) {
   size_t i = 0;
   
 #ifdef USE_X86_INTRINSICS
-  // Process 16 bytes at a time using SSE2
-  const size_t simd_width = 16;
-  const __m128i newline_vec = _mm_set1_epi8('\n'); // creating mask with eol character
+  // Process 32 bytes at a time using AVX2
+  const size_t simd_width = 32;
+  const __m256i newline_vec = _mm256_set1_epi8('\n'); // creating mask with eol character
   
   while (i + simd_width <= size) {
-    // Load 16 characters
-    __m128i chars = _mm_loadu_si128(reinterpret_cast<const __m128i*>(data + i)); // loads chunk of text
+    // Load 32 characters
+    __m256i chars = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(data + i)); // loads chunk of text
     
     // Compare with newline character
-    __m128i cmp = _mm_cmpeq_epi8(chars, newline_vec); // vector compare
-    int mask = _mm_movemask_epi8(cmp);
+    __m256i cmp = _mm256_cmpeq_epi8(chars, newline_vec); // vector compare
+    int mask = _mm256_movemask_epi8(cmp);
     
     if (mask == 0) {
       // No newlines in this chunk
