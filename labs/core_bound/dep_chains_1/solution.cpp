@@ -78,5 +78,5 @@ unsigned solution(List *l1, List *l2) {
 
 unsigned solution(List *l1, List *l2) {
   // Use M=4 by default
-  return solution<4>(l1, l2);
+  return solution<8>(l1, l2);
 }
