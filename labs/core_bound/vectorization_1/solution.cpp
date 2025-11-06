@@ -3,27 +3,64 @@
 #include <cassert>
 #include <type_traits>
 
+namespace {
+using score_t = int16_t;
+using column_t = std::array<score_t, sequence_size_v + 1>;
+
+/*
+ * Initialise score values.
+ */
+constexpr score_t gap_open{-11};
+constexpr score_t gap_extension{-1};
+constexpr score_t match{6};
+constexpr score_t mismatch{-4};
+
+struct init_columns_t {
+  column_t score_column;
+  column_t horizontal_gap_column;
+  score_t last_vertical_gap;
+};
+
+inline init_columns_t create_init_columns() {
+  column_t score_column{};
+  column_t horizontal_gap_column{};
+  score_t last_vertical_gap{};
+
+  /*
+   * Initialise the first column of the matrix.
+   */
+  horizontal_gap_column[0] = gap_open;
+  last_vertical_gap = gap_open;
+
+  for (size_t i = 1; i < score_column.size(); ++i) {
+    score_column[i] = last_vertical_gap;
+    horizontal_gap_column[i] = last_vertical_gap + gap_open;
+    last_vertical_gap += gap_extension;
+  }
+
+
+  return init_columns_t {
+    .score_column = score_column,
+    .horizontal_gap_column = horizontal_gap_column,
+    .last_vertical_gap = last_vertical_gap,
+  };
+}
+
+}
+
 // The alignment algorithm which computes the alignment of the given sequence
 // pairs.
 result_t compute_alignment(std::vector<sequence_t> const &sequences1,
                            std::vector<sequence_t> const &sequences2) {
   result_t result{};
 
+  const auto init_columns = create_init_columns();
+
   for (size_t sequence_idx = 0; sequence_idx < sequences1.size();
        ++sequence_idx) {
-    using score_t = int16_t;
-    using column_t = std::array<score_t, sequence_size_v + 1>;
 
     sequence_t const &sequence1 = sequences1[sequence_idx];
     sequence_t const &sequence2 = sequences2[sequence_idx];
-
-    /*
-     * Initialise score values.
-     */
-    score_t gap_open{-11};
-    score_t gap_extension{-1};
-    score_t match{6};
-    score_t mismatch{-4};
 
     /*
      * Setup the matrix.
@@ -31,21 +68,9 @@ result_t compute_alignment(std::vector<sequence_t> const &sequences1,
      * since we are only interested in the last value of the last column in the
      * score matrix.
      */
-    column_t score_column{};
-    column_t horizontal_gap_column{};
-    score_t last_vertical_gap{};
-
-    /*
-     * Initialise the first column of the matrix.
-     */
-    horizontal_gap_column[0] = gap_open;
-    last_vertical_gap = gap_open;
-
-    for (size_t i = 1; i < score_column.size(); ++i) {
-      score_column[i] = last_vertical_gap;
-      horizontal_gap_column[i] = last_vertical_gap + gap_open;
-      last_vertical_gap += gap_extension;
-    }
+    column_t score_column = init_columns.score_column;
+    column_t horizontal_gap_column = init_columns.horizontal_gap_column;
+    score_t last_vertical_gap = init_columns.last_vertical_gap;
 
     /*
      * Compute the main recursion to fill the matrix.
