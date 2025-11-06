@@ -52,12 +52,13 @@ public:
                 // finding the number of neighbours that are alive                  
                 for(int p = -1; p <= 1; p++) {              // row-offet (-1,0,1)
                     for(int q = -1; q <= 1; q++) {          // col-offset (-1,0,1)
+                        int tmp = aliveNeighbours;
+                        aliveNeighbours += current[i + p][j + q];
                         if((i + p < 0) ||                   // if row offset less than UPPER boundary
                            (i + p > M - 1) ||               // if row offset more than LOWER boundary
                            (j + q < 0) ||                   // if column offset less than LEFT boundary
                            (j + q > N - 1))                 // if column offset more than RIGHT boundary
-                            continue;
-                        aliveNeighbours += current[i + p][j + q];
+                            aliveNeighbours = tmp;
                     }
                 }
                 // The cell needs to be subtracted from
