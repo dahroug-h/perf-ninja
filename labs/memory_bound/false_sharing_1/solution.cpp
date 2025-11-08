@@ -1,6 +1,7 @@
 #include "solution.hpp"
 #include <atomic>
 #include <cstring>
+#include <new>
 #include <omp.h>
 #include <vector>
 
@@ -8,7 +9,10 @@ std::size_t solution(const std::vector<uint32_t> &data, int thread_count) {
   // Using std::atomic counters to disallow compiler to promote `target`
   // memory location into a register. This way we ensure that the store
   // to `target` stays inside the loop.
-  struct Accumulator {
+
+  /// @note std::hardware_destructive_interference_size not supported on
+  /// compiler used in triggered Github Actions runners. So just hardcode it.
+  struct alignas(64) Accumulator {
     std::atomic<uint32_t> value = 0;
   };
   std::vector<Accumulator> accumulators(thread_count);
