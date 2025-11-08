@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <memory>
 
@@ -10,11 +11,15 @@
 #define ON_WINDOWS
 #endif
 
-#if defined(ON_LINUX)
+#if defined(ON_LINUX) || defined(ON_MACOS)
 
 // HINT: allocate huge pages using mmap/munmap
 // NOTE: See HugePagesSetupTips.md for how to enable huge pages in the OS
 #include <sys/mman.h>
+
+#if defined(ON_MACOS)
+#include <mach/vm_statistics.h>
+#endif
 
 #elif defined(ON_WINDOWS)
 
@@ -35,6 +40,7 @@
 #include <windows.h>
 
 #include <Sddl.h>
+#include <memoryapi.h>
 #include <ntsecapi.h>
 #include <ntstatus.h>
 
@@ -74,7 +80,7 @@ inline auto getUserToken() {
   // Probe the buffer size reqired for PTOKEN_USER structure
   DWORD dwbuf_sz = 0;
   if (!GetTokenInformation(proc_token.get(), TokenUser, nullptr, 0,
-                              &dwbuf_sz) &&
+                           &dwbuf_sz) &&
       (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
     throw std::runtime_error{"GetTokenInformation failed"};
 
@@ -83,7 +89,7 @@ inline auto getUserToken() {
   PTOKEN_USER ptr = (PTOKEN_USER)malloc(dwbuf_sz);
   std::unique_ptr<TOKEN_USER, decltype(deleter)> user_token{ptr, deleter};
   if (!GetTokenInformation(proc_token.get(), TokenUser, user_token.get(),
-                              dwbuf_sz, &dwbuf_sz))
+                           dwbuf_sz, &dwbuf_sz))
     throw std::runtime_error{"GetTokenInformation failed"};
 
   return user_token;
@@ -114,11 +120,11 @@ inline bool enableProcPrivilege() {
   priv_token.Privileges->Attributes = SE_PRIVILEGE_ENABLED;
 
   if (!LookupPrivilegeValue(NULL, SE_LOCK_MEMORY_NAME,
-                               &priv_token.Privileges->Luid))
+                            &priv_token.Privileges->Luid))
     throw std::runtime_error{"LookupPrivilegeValue failed"};
 
-  if (!AdjustTokenPrivileges(proc_token.get(), FALSE, &priv_token, 0,
-                                nullptr, 0))
+  if (!AdjustTokenPrivileges(proc_token.get(), FALSE, &priv_token, 0, nullptr,
+                             0))
     throw std::runtime_error{"AdjustTokenPrivileges failed"};
 
   if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
@@ -152,19 +158,62 @@ inline bool setRequiredPrivileges() {
 // Allocate an array of doubles of size `size`, return it as a
 // std::unique_ptr<double[], D>, where `D` is a custom deleter type
 inline auto allocateDoublesArray(size_t size) {
-  // Allocate memory
-  double *alloc = new double[size];
-  // remember to cast the pointer to double* if your allocator returns void*
+  // Update the size to reflect the number of bytes we want.
+  size *= sizeof(double);
 
-  // Deleters can be conveniently defined as lambdas, but you can explicitly
-  // define a class if you're not comfortable with the syntax
-  auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+#if defined(ON_LINUX) || defined(ON_MACOS)
+  int const flags =
+#if defined(ON_LINUX)
+      MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB
+#elif defined(ON_MACOS)
+      MAP_PRIVATE | MAP_ANONYMOUS
+#endif
+      ;
+  int const fd =
+#if defined(ON_LINUX)
+      -1
+#elif defined(ON_MACOS)
+      VM_FLAGS_SUPERPAGE_SIZE_ANY
+#endif
+      ;
+
+  // Try and allocate using HUGETLB.
+  void *ptr = mmap(nullptr, size, PROT_READ | PROT_WRITE, flags, fd, 0);
+
+#if defined(ON_LINUX)
+  if (ptr == MAP_FAILED) {
+    // Allocate using transparent huge pages.
+    ptr =
+        mmap(nullptr, size, PROT_READ | PROT_WRITE, flags ^ MAP_HUGETLB, fd, 0);
+    assert(ptr != MAP_FAILED);
+  int const error = madvise(ptr, size, MADV_HUGEPAGE);
+  assert(error == 0);
+  }
+#elif defined(ON_MACOS)
+  assert(ptr != MAP_FAILED);
+#endif
+
+  double *alloc = static_cast<double *>(ptr);
+  auto deleter = [size](double *ptr) { munmap(ptr, size); };
+
+#elif defined(ON_WINDOWS)
+  static const bool isInitialized = setRequiredPrivileges();
+  assert(isInitialized);
+
+  // Determine minimum large page size.
+  size_t const largePageSize = GetLargePageMinimum();
+
+  // Round up size to be multiple of large page size.
+  size = ((size + largePageSize - 1) / largePageSize) * largePageSize;
+
+  void *ptr =
+      VirtualAlloc(nullptr, size, MEM_RESERVE | MEM_COMMIT | MEM_LARGE_PAGES,
+                   PAGE_READWRITE);
+  double *alloc = static_cast<double *>(ptr);
+  auto deleter = [size](double *ptr) { VirtualFree(ptr, size, MEM_RELEASE); };
+
+#endif
 
   return std::unique_ptr<double[], decltype(deleter)>(alloc,
                                                       std::move(deleter));
-
-  // The above is equivalent to:
-  // return std::make_unique<double[]>(size);
-  // The more verbose version is meant to demonstrate the use of a custom
-  // (potentially stateful) deleter
 }
