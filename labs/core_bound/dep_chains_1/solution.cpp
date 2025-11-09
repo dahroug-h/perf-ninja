@@ -22,20 +22,28 @@ unsigned getSumOfDigits(unsigned n) {
 //       Think how you can execute multiple dependency chains in parallel.
 unsigned solution(List *l1, List *l2) {
   unsigned retVal = 0;
-
   List *head2 = l2;
-  // O(N^2) algorithm:
+
+  unsigned values[64] = { 0 };
+  unsigned nvalues = 0;
   while (l1) {
-    unsigned v = l1->value;
+    nvalues = 0;
+    for (; nvalues < 16; nvalues++) {
+      values[nvalues] = l1->value;
+      l1 = l1->next;
+      if (!l1)
+        break;
+    }
+
     l2 = head2;
     while (l2) {
-      if (l2->value == v) {
-        retVal += getSumOfDigits(v);
-        break;
+      for (unsigned i = 0; i < nvalues; i++) {
+        if (values[i] == l2->value) {
+          retVal += getSumOfDigits(values[i]);
+        }
       }
       l2 = l2->next;
     }
-    l1 = l1->next;
   }
 
   return retVal;
