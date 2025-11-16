@@ -14,7 +14,7 @@ static std::size_t mapToBucket(std::size_t v) {
        6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
        DEFAULT_BUCKET
   };
-  const size_t idx = v < 101 ? v : 100;
+  const size_t idx = __builtin_unpredictable(v < 101) ? v : 100;
   return lut[idx];
 }
 
