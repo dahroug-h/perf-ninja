@@ -3,7 +3,7 @@
 #include <cstdint>
 
 static std::size_t mapToBucket(std::size_t v) {
-  static uint8_t lut[100] = {
+  static std::size_t lut[101] = {
     // 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
        1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -11,9 +11,11 @@ static std::size_t mapToBucket(std::size_t v) {
        3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,
        4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
        5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,
-       6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6
+       6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
+       DEFAULT_BUCKET
   };
-  return v < 100 ? lut[v] : DEFAULT_BUCKET;
+  const size_t idx = v < 101 ? v : 100;
+  return lut[idx];
 }
 
 std::array<std::size_t, NUM_BUCKETS> histogram(const std::vector<int> &values) {
