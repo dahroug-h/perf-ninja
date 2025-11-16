@@ -87,8 +87,8 @@ public:
                 // its neighbours as it was counted before
                 aliveNeighbours -= current[i][j];
 
-                int cell = aliveNeighbours == 2 ? current[i][j] : 0;
-                future[i][j] = aliveNeighbours == 3 ? 1 : cell;
+                int nextCell = aliveNeighbours == 2 ? current[i][j] : 0;
+                future[i][j] = aliveNeighbours == 3 ? 1 : nextCell;
             }
         }
         std::swap(current, future);
