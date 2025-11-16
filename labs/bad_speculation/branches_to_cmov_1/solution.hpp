@@ -47,42 +47,17 @@ public:
         for(int i = 0; i < M; i++) {
             for(int j = 0; j < N; j++) {
                 int aliveNeighbours = 0;      
-                // finding the number of neighbours that are alive                  
-
-                int ii = i - 1;
-                int jj = j - 1;
-                int cell = ii < 0 ? 0 : (jj < 0 ? 0 : current[ii][jj]);
-                aliveNeighbours += cell;
-
-                cell = ii < 0 ? 0 : current[ii][j];
-                aliveNeighbours += cell;
-
-                jj = j + 1;
-                cell = ii < 0 ? 0 : (jj < N ? current[ii][jj] : 0);
-                aliveNeighbours += cell;
-
-                jj = j - 1;
-                cell = jj < 0 ? 0 : current[i][jj];
-                aliveNeighbours += cell;
-
-                aliveNeighbours += current[i][j];
-
-                jj = j + 1;
-                cell = jj < N ? current[i][jj] : 0;
-                aliveNeighbours += cell;
-
-                ii = i + 1;
-                jj = j - 1;
-                cell = ii < M ? (jj < 0 ? 0 : current[ii][jj]) : 0;
-                aliveNeighbours += cell;
-
-                cell = ii < M ? current[ii][j] : 0;
-                aliveNeighbours += cell;
-
-                jj = j + 1;
-                cell = ii < M ? (jj < N ? current[ii][jj] : 0) : 0;
-                aliveNeighbours += cell;
-
+                // finding the number of neighbours that are alive
+                for(int p = -1; p <= 1; p++) {              // row-offet (-1,0,1)
+                    for(int q = -1; q <= 1; q++) {          // col-offset (-1,0,1)
+                        if((i + p < 0) ||                   // if row offset less than UPPER boundary
+                           (i + p > M - 1) ||               // if row offset more than LOWER boundary
+                           (j + q < 0) ||                   // if column offset less than LEFT boundary
+                           (j + q > N - 1))                 // if column offset more than RIGHT boundary
+                            continue;
+                        aliveNeighbours += current[i + p][j + q];
+                    }
+                }
                 // The cell needs to be subtracted from
                 // its neighbours as it was counted before
                 aliveNeighbours -= current[i][j];
