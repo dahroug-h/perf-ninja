@@ -9,7 +9,8 @@ std::size_t select(std::array<S, N> &output, const std::array<S, N> &input,
     const bool inbounds = (lower <= item.first) && (item.first <= upper);
     const auto curr = output[count];
     output[count] = __builtin_unpredictable(inbounds) ? item : curr;
-    count = __builtin_unpredictable(inbounds) ? (count + 1) : count;    
+    // count = __builtin_unpredictable(inbounds) ? (count + 1) : count;
+    count += -(!!(inbounds)) & 1;
   }
   return count;
 }
