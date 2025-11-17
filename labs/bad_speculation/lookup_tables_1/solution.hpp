@@ -1,6 +1,7 @@
 #include <array>
 #include <vector>
 
+extern std::size_t buckets[151];
 constexpr std::size_t NUM_BUCKETS = 8;
 constexpr std::size_t DEFAULT_BUCKET = NUM_BUCKETS - 1;
 constexpr std::size_t NUM_VALUES = 1024 * 1024;

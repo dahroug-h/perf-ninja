@@ -12,10 +12,14 @@ static std::size_t mapToBucket(std::size_t v) {
   return DEFAULT_BUCKET;
 }
 
+static std::size_t mapToBucket2(std::size_t v) {
+  return buckets[v];
+}
+
 std::array<std::size_t, NUM_BUCKETS> histogram(const std::vector<int> &values) {
   std::array<std::size_t, NUM_BUCKETS> retBuckets{0};
   for (auto v : values) {
-    retBuckets[mapToBucket(v)]++;
+    retBuckets[mapToBucket2(v)]++;
   }
   return retBuckets;
 }
