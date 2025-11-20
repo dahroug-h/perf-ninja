@@ -3,31 +3,27 @@
 #include <algorithm>
 #include <stdlib.h>
 
-#ifdef SOULUTION 
+#ifdef SOLUTION
 
-[[gnu::always_inline]] int compare(const void *lhs, const void *rhs) {
-  auto &a = *reinterpret_cast<const S *>(lhs);
-  auto &b = *reinterpret_cast<const S *>(rhs);
-
+[[gnu::always_inline]] bool compare(const S& a, const S& b) {
   if (a.key1 < b.key1)
-    return -1;
+    return true;
 
   if (a.key1 > b.key1)
-    return 1;
+    return false;
 
   if (a.key2 < b.key2)
-    return -1;
+    return true;
 
   if (a.key2 > b.key2)
-    return 1;
+    return false;
 
-  return 0;
+  return true;
 }
 
 
 
 void solution(std::array<S, N> &arr) {
-  
   std::sort(arr.begin(), arr.end(), compare);
 }
 
