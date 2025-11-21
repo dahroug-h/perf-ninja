@@ -26,10 +26,29 @@ void identity(Matrix &result) {
 void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
+  constexpr int kBlockNum = 5;
+  constexpr int kBlockSize = N / kBlockNum;
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+      for (int k = 0; k < kBlockSize; k++) {
+        result[i][0 * kBlockSize + k] += a[i][j] * b[j][0 * kBlockSize + k];
+        result[i][1 * kBlockSize + k] += a[i][j] * b[j][1 * kBlockSize + k];
+        result[i][2 * kBlockSize + k] += a[i][j] * b[j][2 * kBlockSize + k];
+        result[i][3 * kBlockSize + k] += a[i][j] * b[j][3 * kBlockSize + k];
+        result[i][4 * kBlockSize + k] += a[i][j] * b[j][4 * kBlockSize + k];
+      }
+    }
+  }
+}
+
+void multiply_transposed(Matrix &result, const Matrix &a, const Matrix &b_tr) {
+  zero(result);
+
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {
       for (int k = 0; k < N; k++) {
-        result[i][k] += a[i][j] * b[j][k];
+        // result[i][j] += a[i][k] * b[k][j];
+        result[i][j] += a[i][k] * b_tr[j][k];
       }
     }
   }
@@ -43,6 +62,7 @@ Matrix power(const Matrix &input, const uint32_t k) {
 
   // Temporary elements = a^(2^integer)
   std::unique_ptr<Matrix> elementCurrent(new Matrix());
+  // std::unique_ptr<Matrix> elementCurrentTr(new Matrix());
   std::unique_ptr<Matrix> elementNext(new Matrix());
 
   // Initial values
