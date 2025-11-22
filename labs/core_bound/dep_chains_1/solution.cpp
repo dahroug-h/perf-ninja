@@ -11,6 +11,8 @@ unsigned getSumOfDigits(unsigned n) {
   return sum;
 }
 
+//#ifndef SOLUTION
+
 // Task: lookup all the values from l2 in l1.
 // For every found value, find the sum of its digits.
 // Return the sum of all digits in every found number.
@@ -20,7 +22,7 @@ unsigned getSumOfDigits(unsigned n) {
 // Hint: Traversing a linked list is a long data dependency chain:
 //       to get the node N+1 you need to retrieve the node N first.
 //       Think how you can execute multiple dependency chains in parallel.
-unsigned solution(List *l1, List *l2) {
+unsigned solution1(List *l1, List *l2) {
   unsigned retVal = 0;
 
   List *head2 = l2;
@@ -40,3 +42,36 @@ unsigned solution(List *l1, List *l2) {
 
   return retVal;
 }
+
+//#else
+
+constexpr int STEP = 8;
+
+unsigned solution(List *l1, List *l2) {
+  unsigned retVal = 0;
+  unsigned compare_array[STEP];
+  int compare_count = 0;
+
+  List *head2 = l2;
+  while (l1) {
+    while(l1 && compare_count < STEP) {
+      compare_array[compare_count++] = l1->value;
+      l1 = l1->next;
+    }
+
+    l2 = head2;
+    while (l2) {
+      for(int i = 0; i < compare_count; i++) {
+        if (l2->value == compare_array[i]) {
+          retVal += getSumOfDigits(l2->value);
+        }
+      }
+      l2 = l2->next;
+    }
+    compare_count = 0;
+  }
+
+  return retVal;
+}
+
+//#endif
