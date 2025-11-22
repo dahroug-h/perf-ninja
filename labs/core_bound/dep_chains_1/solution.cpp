@@ -45,7 +45,7 @@ unsigned solution1(List *l1, List *l2) {
 
 //#else
 
-constexpr int STEP = 16;
+constexpr int STEP = 12;
 
 unsigned solution(List *l1, List *l2) {
   unsigned retVal = 0;
