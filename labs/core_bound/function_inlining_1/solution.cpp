@@ -3,16 +3,12 @@
 #include <algorithm>
 #include <stdlib.h>
 
-//#ifdef SOLUTION
-
-[[gnu::always_inline]] bool compare(const S& a, const S& b) noexcept {
-  return a.key1 < b.key1 || (a.key1 == b.key1 && a.key2 < b.key2);
-}
-
-
+// #ifdef SOLUTION
 
 void solution(std::array<S, N> &arr) {
-  std::sort(arr.begin(), arr.end(), compare);
+  std::sort(arr.begin(), arr.end(), [](const auto& a, const auto& b) constexpr noexcept {
+    return a.key1 < b.key1 || (a.key1 == b.key1 && a.key2 < b.key2);
+  });
 }
 
 // #else
