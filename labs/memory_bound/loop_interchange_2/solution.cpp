@@ -11,51 +11,65 @@ static void filterVertically(uint8_t *output, const uint8_t *input,
                              const int shift) {
   const int rounding = 1 << (shift - 1);
 
-  for (int c = 0; c < width; c++) {
-    // Top part of line, partial kernel
-    for (int r = 0; r < std::min(radius, height); r++) {
-      // Accumulation
-      int dot = 0;
-      int sum = 0;
-      auto p = &kernel[radius - r];
-      for (int y = 0; y <= std::min(r + radius, height - 1); y++) {
-        int weight = *p++;
-        dot += input[y * width + c] * weight;
-        sum += weight;
-      }
+  std::unique_ptr<int[]> dots(new int[width * height]{0});
+  std::unique_ptr<int[]> sums(new int[std::min(radius, height)]{0});
 
-      // Normalization
-      int value = static_cast<int>(dot / static_cast<float>(sum) + 0.5f);
+  for (int y = 0; y < std::min(radius, height); ++y) {
+    for (int i = radius - y; i < std::min(radius + 1 + radius, height); ++i) {
+      sums[y] += kernel[i];
+    }
+  }
+
+  // Top part of line, partial kernel
+  for (int r = 0; r < std::min(radius, height); r++) {
+    for (int y = 0; y <= std::min(r + radius, height - 1); y++) {
+      for (int c = 0; c < width; c++) {
+        dots[r * width + c] += input[y * width + c] * kernel[radius - r + y];
+      }
+    }
+  }
+
+  // Top part of line normalization
+  for (int r = 0; r < std::min(radius, height); r++) {
+    for (int c = 0; c < width; c++) {
+      int value = static_cast<int>(
+        dots[r * width + c] / static_cast<float>(sums[r]) + 0.5f);
       output[r * width + c] = static_cast<uint8_t>(value);
     }
+  }
 
-    // Middle part of computations with full kernel
-    for (int r = radius; r < height - radius; r++) {
-      // Accumulation
-      int dot = 0;
-      for (int i = 0; i < radius + 1 + radius; i++) {
-        dot += input[(r - radius + i) * width + c] * kernel[i];
+  // Middle part of computations with full kernel
+  for (int r = radius; r < height - radius; r++) {
+    for (int i = 0; i < radius + 1 + radius; i++) {
+      for (int c = 0; c < width; c++) {
+        dots[r * width + c] += input[(r - radius + i) * width + c] * kernel[i];
       }
+    }
+  }
 
+  // Middle part normalization
+  for (int r = radius; r < height - radius; r++) {
+    for (int c = 0; c < width; c++) {
       // Fast shift instead of division
-      int value = (dot + rounding) >> shift;
+      int value = (dots[r * width + c] + rounding) >> shift;
       output[r * width + c] = static_cast<uint8_t>(value);
     }
+  }
 
-    // Bottom part of line, partial kernel
-    for (int r = std::max(radius, height - radius); r < height; r++) {
-      // Accumulation
-      int dot = 0;
-      int sum = 0;
-      auto p = kernel;
-      for (int y = r - radius; y < height; y++) {
-        int weight = *p++;
-        dot += input[y * width + c] * weight;
-        sum += weight;
+  // Bottom part of line, partial kernel
+  for (int r = std::max(radius, height - radius); r < height; r++) {
+    for (int y = r - radius; y < height; y++) {
+      for (int c = 0; c < width; c++) {
+        dots[r * width + c] += input[y * width + c] * kernel[y - (r - radius)];
       }
+    }
+  }
 
-      // Normalization
-      int value = static_cast<int>(dot / static_cast<float>(sum) + 0.5f);
+  // Bottom part of line normalization
+  for (int r = std::max(radius, height - radius); r < height; r++) {
+    for (int c = 0; c < width; c++) {
+      int value = static_cast<int>(
+        dots[r * width + c] / static_cast<float>(sums[height - r - 1]) + 0.5f);
       output[r * width + c] = static_cast<uint8_t>(value);
     }
   }
