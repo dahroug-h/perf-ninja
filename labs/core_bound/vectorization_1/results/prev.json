@@ -1,6 +1,6 @@
 {
   "context": {
-    "date": "2025-12-12T23:35:49-05:00",
+    "date": "2025-12-13T13:24:54-05:00",
     "host_name": "HanchendeNEW-MacBook-Pro-2.local",
     "executable": "/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/build/lab",
     "num_cpus": 10,
@@ -26,7 +26,7 @@
         "num_sharing": 1
       }
     ],
-    "load_avg": [3.82812,4.43262,4.02246],
+    "load_avg": [6.29639,4.76318,4.44434],
     "library_version": "v1.9.4",
     "library_build_type": "release",
     "json_schema_version": 1
@@ -41,9 +41,9 @@
       "repetitions": 1,
       "repetition_index": 0,
       "threads": 1,
-      "iterations": 1652,
-      "real_time": 8.4140645137133379e+05,
-      "cpu_time": 8.4058171912832931e+05,
+      "iterations": 1615,
+      "real_time": 8.7383787433152599e+05,
+      "cpu_time": 8.7058018575851398e+05,
       "time_unit": "ns"
     }
   ]

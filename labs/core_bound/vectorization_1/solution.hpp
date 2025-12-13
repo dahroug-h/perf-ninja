@@ -10,5 +10,8 @@ inline constexpr size_t sequence_count_v = 16; // The number of sequences to gen
 using sequence_t = std::array<uint8_t, sequence_size_v>;
 using result_t = std::array<int16_t, sequence_count_v>;
 
+
+
+
 result_t compute_alignment(std::vector<sequence_t> const &, std::vector<sequence_t> const &);
 std::pair<std::vector<sequence_t>, std::vector<sequence_t>> init();
