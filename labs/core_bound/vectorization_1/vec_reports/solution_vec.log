@@ -1,0 +1,6 @@
+1:[ 25%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
+2:[ 25%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
+3:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78::787::7 :remark:  loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]remark: 
+9:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78:7: :7:remark:  remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+11:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
+12:   57 |     for (size_t i = 1; i < /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]

@@ -41,18 +41,35 @@ result_t compute_alignment(std::vector<sequence_t> const &sequences1,
     horizontal_gap_column[0] = gap_open;
     last_vertical_gap = gap_open;
 
+    // for (size_t i = 1; i < score_column.size(); ++i) {
+
+    //   score_column[i] = last_vertical_gap;
+    //   horizontal_gap_column[i] = last_vertical_gap + gap_open;
+
+    //   last_vertical_gap += gap_extension;
+    // }
+
+
+
+    horizontal_gap_column[0] = gap_open;
+    last_vertical_gap = gap_open;
+
     for (size_t i = 1; i < score_column.size(); ++i) {
-      score_column[i] = last_vertical_gap;
-      horizontal_gap_column[i] = last_vertical_gap + gap_open;
-      last_vertical_gap += gap_extension;
+      score_t v = gap_open + gap_extension * (i - 1);
+      score_column[i] = v;
+      horizontal_gap_column[i] = v + gap_open;
     }
+
+
+
+    
 
     /*
      * Compute the main recursion to fill the matrix.
      */
     for (unsigned col = 1; col <= sequence2.size(); ++col) {
-      score_t last_diagonal_score =
-          score_column[0]; // Cache last diagonal score to compute this cell.
+      score_t last_diagonal_score = score_column[0]; // Cache last diagonal score to compute this cell.
+
       score_column[0] = horizontal_gap_column[0];
       last_vertical_gap = horizontal_gap_column[0] + gap_open;
       horizontal_gap_column[0] += gap_extension;
@@ -68,12 +85,17 @@ result_t compute_alignment(std::vector<sequence_t> const &sequences1,
         best_cell_score = std::max(best_cell_score, horizontal_gap_column[row]);
         // Cache next diagonal value and store optimum in score_column.
         last_diagonal_score = score_column[row];
+
         score_column[row] = best_cell_score;
         // Compute the next values for vertical and horizontal gap.
         best_cell_score += gap_open;
         last_vertical_gap += gap_extension;
+
+
         horizontal_gap_column[row] += gap_extension;
         // Store optimum between gap open and gap extension.
+
+        
         last_vertical_gap = std::max(last_vertical_gap, best_cell_score);
         horizontal_gap_column[row] =
             std::max(horizontal_gap_column[row], best_cell_score);

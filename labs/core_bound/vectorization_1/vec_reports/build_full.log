@@ -1,0 +1,20 @@
+[ 25%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
+[ 25%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78::787::7 :remark:  loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]remark: 
+loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+      7878 |       for (uns |  i g n e d  frow =o 1;r  r(ouwn s<i=g nseedq ureonwc e=1 .1size(); ++row) {
+      |       ^
+; row <= sequence1.size(); ++row) {
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78:7: :7:remark:  remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+loop not vectorized [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
+   57 |     for (size_t i = 1; i < /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
+score   57 |    _column.size(); ++i) {
+      |     ^
+ for (size_t i = 1; i < score_column.size(); ++i) {
+      |     ^
+[ 37%] Linking CXX executable lab
+[ 50%] Linking CXX executable validate
+[100%] Built target lab
+[100%] Built target validate
