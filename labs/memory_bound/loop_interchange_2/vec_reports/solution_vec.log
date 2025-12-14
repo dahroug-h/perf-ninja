@@ -1,0 +1,28 @@
+1:[ 33%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
+2:[ 33%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
+3:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:42:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+6:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:42:7: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+7:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:31:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+10:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:31:9: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+11:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:42:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+14:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:53:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+15:   53 |    /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:42:7: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+18:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:31:9: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+21:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:53:5: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+22:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:31:9: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+23:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:53:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+26:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:74:7: remark: vectorized loop (vectorization width: 16, interleaved count: 2) [-Rpass=loop-vectorize]
+29:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:53:5: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+30:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:131:7: remark: vectorized loop (vectorization width: 16, interleaved count: 2) [-Rpass=loop-vectorize]
+33:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:74:7: remark: vectorized loop (vectorization width: 16, interleaved count: 2) [-Rpass=loop-vectorize]
+36:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:113:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+39:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:113:5: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+40:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:131:7: remark: vectorized loop (vectorization width: 16, interleaved count: 2) [-Rpass=loop-vectorize]
+43:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:113:5: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+46:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:101:7: remark: vectorized loop (vectorization width: 16, interleaved count: 2) [-Rpass=loop-vectorize]
+49:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:113:5: remark: vectorized loop (vectorization width: 16, interleaved count: 1) [-Rpass=loop-vectorize]
+50:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:101:7: remark: vectorized loop (vectorization width: 16, interleaved count: 2) [-Rpass=loop-vectorize]
+53:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:4:
+61:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:4:
+70:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:4:
+78:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_2/solution.cpp:4:
