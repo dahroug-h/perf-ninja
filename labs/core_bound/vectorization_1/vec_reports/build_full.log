@@ -1,20 +1,122 @@
-[ 25%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
-[ 25%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
-/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78::787::7 :remark:  loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]remark: 
-loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
-      7878 |       for (uns |  i g n e d  frow =o 1;r  r(ouwn s<i=g nseedq ureonwc e=1 .1size(); ++row) {
-      |       ^
-; row <= sequence1.size(); ++row) {
-      |       ^
-/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78:7: :7:remark:  remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-loop not vectorized [-Rpass-missed=loop-vectorize]
-/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
-   57 |     for (size_t i = 1; i < /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
-score   57 |    _column.size(); ++i) {
+[ 37%] Building CXX object CMakeFiles/lab.dir/bench.cpp.o
+[ 37%] Building CXX object CMakeFiles/validate.dir/validate.cpp.o
+[ 50%] Building CXX object CMakeFiles/validate.dir/init.cpp.o
+[ 50%] Building CXX object CMakeFiles/lab.dir/init.cpp.o
+[ 62%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
+[ 75%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp   17 |     :17:5: foremark: rthe cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize](
+siz   17 |     for(size_et _t j = 0;j j < s = 0; j < sequences.size(); ++j){
       |     ^
- for (size_t i = 1; i < score_column.size(); ++i) {
+equences.size(); ++j){
       |     ^
-[ 37%] Linking CXX executable lab
-[ 50%] Linking CXX executable validate
-[100%] Built target lab
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp::1717::55::  remark: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:70:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp3::70 :remark: 3the cost-model indicates that vectorization is not beneficial [-Rpass-missed=loop-vectorize]:
+ remark: the cost-model indicates that vectorization is not beneficial [-Rpass-missed=loop-vectorize]
+   70 |      70 |   for(size_t ifor (=s i1z;e _it  <i score _=c o1l; i u<m ns.csize(o)r;e _++i)c{o
+l      u| mn.si  ^z
+e(); ++i){/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:70:
+3      :|    ^remark: 
+the cost-model indicates that interleaving is not beneficial [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:70:3: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:107:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+  107 |       for(int k = 0; k < sequen/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:107:c7e:_ cremark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+  107 |       for(int k = 0; ok <u nste_v; ++k){
+      |       ^
+quence_count_v; ++k){
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp::107107:7: remark: vectorized loop (vectorization width: 8, interleaved count: 1) [-Rpass=loop-vectorize]
+:7: remark: vectorized loop (vectorization width: 8, interleaved count: 1) [-Rpass=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:70:7: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+   70 |       for (unsigned row = 1; row <= sequence1.size(); ++row) {
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:70:7: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:54:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
+   54 |     for (size_t i = 1; i < score_column.size(); ++i) {
+      |     ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/iostream:46:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/istream:170:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__ostream/basic_ostream.h:435:10: remark: loop not vectorized: loop contains a switch statement [-Rpass-analysis=loop-vectorize]
+  435 |   return std::__put_character_sequence(__os, __str, _Traits::length(__str));
+      |          ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:1:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.hpp:5:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/vector:363:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/locale:209:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__locale_dir/pad_and_output.h:16:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ios:696:3: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+  696 |   return std::use_facet<ctype<char_type> >(getloc()).widen(__c);
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:6:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+    6 |   for (size_t i = 0; i < expected.size(); ++i) {
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:6:3: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/validate.cpp:6:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/bench.cpp:8:16: remark: loop not vectorized: loop contains a switch statement [-Rpass-analysis=loop-vectorize]
+    8 |     auto res = compute_alignment(sequences1, sequences2);
+      |                ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/bench.cpp:1:
+/opt/homebrew/include/benchmark/benchmark.h:530:3: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+  530 |   asm volatile("" : "+r,m"(value) : : "memory");
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/bench.cpp:7:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+    7 |   for (auto _ : state) {
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/bench.cpp:7:3: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/bench.cpp:7:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/init.cpp:3:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/random:1702:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/mersenne_twister_engine.h:331:25: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+  331 |     __x_[__i] = (__f * (__x_[__i - 1] ^ __rshift<__w - 2>(__x_[__i - 1])) + __i) & _Max;
+      |                         ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/mersenne_twister_engine.h:330:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+  330 |   for (size_t __i = 1; __i < __n; ++__i)
+      |   ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/mersenne_twister_engine.h:415:31: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+  415 |   const size_t __j         = (__i_ + 1) % __n;
+      |                               ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/init.cpp:1:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.hpp:1:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:564:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/algorithm:1908:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/shuffle.h:16:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h:226:3: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+  226 |   do {
+      |   ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h:226:3: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/init.cpp:3:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/random:1702:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/mersenne_twister_engine.h:331:25: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+  331 |     __x/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h:226:3:_ remark: [__i]loop not vectorized [-Rpass-missed=loop-vectorize]
+ = (__f * (__x_[__i - 1] ^ __rshift<__w - 2>(__x_[__i - 1])) + __i) & _Max;
+      |                         ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/mersenne_twister_engine.h:330:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+  330 |   for (size_t __i = 1; __i < __n; ++__i)
+      |   ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/mersenne_twister_engine.h:415:31: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+  415 |   const size_t __j         = (__i_ + 1) % __n;
+      |                               ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/init.cpp:1:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.hpp:1:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:564:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/algorithm:1908:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/shuffle.h:16:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h:226:3: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+  226 |   do {
+      |   ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h:226:3: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h:226:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+[100%] Linking CXX executable validate
+[100%] Linking CXX executable lab
 [100%] Built target validate
+[100%] Built target lab

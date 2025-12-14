@@ -1,6 +1,19 @@
-1:[ 25%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
-2:[ 25%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
-3:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78::787::7 :remark:  loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]remark: 
-9:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:78:7: :7:remark:  remark: loop not vectorized [-Rpass-missed=loop-vectorize]
-11:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
-12:   57 |     for (size_t i = 1; i < /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:57:5: remark: vectorized loop (vectorization width: 8, interleaved count: 4) [-Rpass=loop-vectorize]
+5:[ 62%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
+6:[ 75%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
+7:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+8:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp   17 |     :17:5: foremark: rthe cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize](
+13:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp::1717::55::  remark: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+15:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+16:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+17:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+18:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+19:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+20:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+21:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: the cost-model indicates that vectorization is not beneficial [-Rpass-analysis=loop-vectorize]
+22:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:17:5: remark: interleaved loop (interleaved count: 4) [-Rpass=loop-vectorize]
+23:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:70:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp3::70 :remark: 3the cost-model indicates that vectorization is not beneficial [-Rpass-missed=loop-vectorize]:
+27:e(); ++i){/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:70:
+30:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:70:3: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-missed=loop-vectorize]
+31:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:107:7: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+32:  107 |       for(int k = 0; k < sequen/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp:107:c7e:_ cremark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+37:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/core_bound/vectorization_1/solution.cpp::107107:7: remark: vectorized loop (vectorization width: 8, interleaved count: 1) [-Rpass=loop-vectorize]
