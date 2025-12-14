@@ -25,7 +25,7 @@ Every lab can be built and run using the following commands:
 ```
 cmake -E make_directory build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
 cmake --build . --config Release --parallel 8
 cmake --build . --target validateLab
 cmake --build . --target benchmarkLab
