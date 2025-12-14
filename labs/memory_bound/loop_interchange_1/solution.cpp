@@ -6,30 +6,35 @@
 // Make zero matrix
 void zero(Matrix &result) {
   for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      result[i][j] = 0;
-    }
+    result[i].fill(0);
+    // for (int j = 0; j < N; j++) {
+    //   result[i][j] = 0;
+    // }
   }
 }
 
 // Make identity matrix
 void identity(Matrix &result) {
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      result[i][j] = 0;
-    }
+  // for (int i = 0; i < N; i++) {
+  //   for (int j = 0; j < N; j++) {
+  //     result[i][j] = 0;
+  //   }
+  //   result[i][i] = 1;
+  // }
+  zero(result);
+  for(int i = 0; i < N; ++i){
     result[i][i] = 1;
   }
 }
 
-Matrix transpose(Matrix input){
-  for(int i{}; i < N; ++i){
-    for(int j{i + 1}; j < N; ++j){
-      std::swap(input[i][j], input[j][i]);
-    }
-  }
+Matrix transpose(const Matrix& input){
+  Matrix output{};
 
-  return input;
+  for(int i = 0; i < N; ++i)
+    for(int j = 0; j < N; ++j)
+      output[j][i] = input[i][j];
+
+  return output;
 }
 
 // Multiply two square matrices
@@ -37,7 +42,6 @@ void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
   auto tr_b = transpose(b);
-
 
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {

@@ -1,0 +1,36 @@
+4:[ 75%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
+6:[ 75%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
+7:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:19:20: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+10:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+13:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+14:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+27:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+30:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:19:20: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+33:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+46:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+47:   27 |     for(int j{i + 1}; j/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+50:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+53:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+66:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+68:      |     ^/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+72:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+75:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+88:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+89:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17   :327: |     f remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+92:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+95:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+97:      |       ^/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+101:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+114:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+117:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+120:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+133:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+136:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:19:20: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+139:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+142:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+143:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+146:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+159:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+162:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+165:In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+178:/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]

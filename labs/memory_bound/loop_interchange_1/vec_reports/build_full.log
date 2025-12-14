@@ -1,0 +1,221 @@
+[ 37%] Building CXX object CMakeFiles/lab.dir/bench.cpp.o
+[ 37%] Building CXX object CMakeFiles/validate.dir/init.cpp.o
+[ 75%] Building CXX object CMakeFiles/lab.dir/init.cpp.o
+[ 75%] Building CXX object CMakeFiles/validate.dir/solution.cpp.o
+[ 75%] Building CXX object CMakeFiles/validate.dir/validate.cpp.o
+[ 75%] Building CXX object CMakeFiles/lab.dir/solution.cpp.o
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:19:20: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   19 |       result[i][j] = 0;
+      |                    ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   17 |   for (int i = 0; i < N; i++) {
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h:13:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:16:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+   27 |     for(int j{i + 1}; j < N; ++j){
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:19:20: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   19 |       result[i][j] = 0;
+      |                    ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h:13:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:16:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+   27 |     for(int j{i + 1}; j/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   17 |   for (int i = 0; i < N; i++) {
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+ < N; ++j){
+      |     ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h:13:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:16:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+   27 |     for(int j{i + 1}; j < N; ++j){
+      |     ^/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   46 |       for (int k = 0; k < N; k++) {
+      |       ^
+
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h::1319:
+:In file included from 20/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   1619:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+ |       result[i][j] = 0;
+      |                    ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17   :327: |     f remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   17 |   for (int i = 0; i < N; i++) {
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+or(int j{i + 1}; j < N; ++j){
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   46 |       for (int k = 0; k < N; k++) {
+      |       ^/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   46
+ |       for (int k = 0; k < N; k++) {
+      |       ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h:13:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:16:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+   27 |     for(int j{i + 1}; j < N; ++j){
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   46 |       for (int k = 0; k < N; k++) {
+      |       ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h:13:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:16:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+   27 |     for(int j{i + 1}; j < N; ++j){
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:19:20: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   19 |       result[i][j] = 0;
+      |                    ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   17 |   for (int i = 0; i < N; i++) {
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:17:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   46 |       for (int k = 0; k < N; k++) {
+      |       ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h:13:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:16:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+   27 |     for(int j{i + 1}; j < N; ++j){
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:46:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   46 |       for (int k = 0; k < N; k++) {
+      |       ^
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:2:
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.h:2:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:117:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/equal.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unwrap_iter.h:13:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator_traits.h:16:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/copyable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/movable.h:14:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/swappable.h:25:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/swap.h:45:7: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/array:270:12 [-Rpass-analysis=loop-vectorize]
+   45 |   __x = std::move(__y);
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/solution.cpp:27:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+   27 |     for(int j{i + 1}; j < N; ++j){
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/init.cpp:22:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   22 |       for (int j = 0; j < N; j++) {
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/init.cpp:13:5: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+   13 |     for (int j = 0; j < N; j++) {
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/init.cpp:13:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/init.cpp:22:7: remark: vectorized loop (vectorization width: 4, interleaved count: 4) [-Rpass=loop-vectorize]
+   22 |       for (int j = 0; j < N; j++) {
+      |       ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/init.cpp:13:5: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+   13 |     for (int j = 0; j < N; j++) {
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/init.cpp:13:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+In file included from /Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/validate.cpp:5:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/iostream:45:
+In file included from /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ios:223:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__locale:172:42: remark: loop not vectorized: loop contains a switch statement [-Rpass-analysis=loop-vectorize]
+  172 |   return static_cast<const _Facet&>(*__l.use_facet(_Facet::id));
+      |                                          ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/validate.cpp:15:5: remark: loop not vectorized: value that could not be identified as reduction is used outside the loop [-Rpass-analysis=loop-vectorize]
+   15 |     for (int j = 0; j < N; j++) {
+      |     ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/validate.cpp:15:5: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/validate.cpp:15:5: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/validate.cpp:15:5: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/bench.cpp:14:10: remark: loop not vectorized: loop contains a switch statement [-Rpass-analysis=loop-vectorize]
+   14 |     *b = power(*a, 2021);
+      |          ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/bench.cpp:14:8: remark: loop not vectorized: call instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   14 |     *b = power(*a, 2021);
+      |        ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/bench.cpp:13:3: remark: loop not vectorized: instruction cannot be vectorized [-Rpass-analysis=loop-vectorize]
+   13 |   for (auto _ : state) {
+      |   ^
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/bench.cpp:13:3: remark: loop not vectorized: could not determine number of loop iterations [-Rpass-analysis=loop-vectorize]
+/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/bench.cpp:13:3: remark: loop not vectorized [-Rpass-missed=loop-vectorize]
+[ 87%] Linking CXX executable validate
+[100%] Linking CXX executable lab
+[100%] Built target validate
+[100%] Built target lab
