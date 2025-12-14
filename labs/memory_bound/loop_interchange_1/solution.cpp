@@ -44,14 +44,13 @@ void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   auto tr_b = transpose(b);
 
   for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      double r_ij{};
+    for (int k = 0; k < N; k++) {
       
-      for (int k = 0; k < N; k++) {
-        r_ij += a[i][k] * tr_b[j][k];
+      double aik{a[i][k]};
+      for (int j = 0; j < N; j++) {
+        result[i][j] += aik * b[k][j];
       }
 
-      result[i][j] = r_ij;
     }
   }
 }

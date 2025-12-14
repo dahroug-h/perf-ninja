@@ -1,6 +1,6 @@
 {
   "context": {
-    "date": "2025-12-13T19:57:35-05:00",
+    "date": "2025-12-13T20:07:19-05:00",
     "host_name": "HanchendeNEW-MacBook-Pro-2.local",
     "executable": "/Users/hanchenliu/Documents/GitHub/perf-ninja/labs/memory_bound/loop_interchange_1/build/lab",
     "num_cpus": 10,
@@ -26,7 +26,7 @@
         "num_sharing": 1
       }
     ],
-    "load_avg": [3.17529,3.93311,4.7168],
+    "load_avg": [4.75439,4.88672,4.85645],
     "library_version": "v1.9.4",
     "library_build_type": "release",
     "json_schema_version": 1
@@ -41,9 +41,9 @@
       "repetitions": 1,
       "repetition_index": 0,
       "threads": 1,
-      "iterations": 12,
-      "real_time": 1.1943938889695953e+08,
-      "cpu_time": 1.1939875000000000e+08,
+      "iterations": 8,
+      "real_time": 1.8270859372569248e+08,
+      "cpu_time": 1.8263000000000000e+08,
       "time_unit": "ns"
     }
   ]
