@@ -27,21 +27,21 @@ void identity(Matrix &result) {
   }
 }
 
-Matrix transpose(const Matrix& input){
-  Matrix output{};
+// Matrix transpose(const Matrix& input){
+//   Matrix output{};
 
-  for(int i = 0; i < N; ++i)
-    for(int j = 0; j < N; ++j)
-      output[j][i] = input[i][j];
+//   for(int i = 0; i < N; ++i)
+//     for(int j = 0; j < N; ++j)
+//       output[j][i] = input[i][j];
 
-  return output;
-}
+//   return output;
+// }
 
 // Multiply two square matrices
 void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
-  auto tr_b = transpose(b);
+  // auto tr_b = transpose(b);
 
   for (int i = 0; i < N; i++) {
     for (int k = 0; k < N; k++) {
