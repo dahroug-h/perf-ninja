@@ -6,51 +6,31 @@
 // Make zero matrix
 void zero(Matrix &result) {
   for (int i = 0; i < N; i++) {
-    result[i].fill(0);
-    // for (int j = 0; j < N; j++) {
-    //   result[i][j] = 0;
-    // }
+    for (int j = 0; j < N; j++) {
+      result[i][j] = 0;
+    }
   }
 }
 
 // Make identity matrix
 void identity(Matrix &result) {
-  // for (int i = 0; i < N; i++) {
-  //   for (int j = 0; j < N; j++) {
-  //     result[i][j] = 0;
-  //   }
-  //   result[i][i] = 1;
-  // }
-  zero(result);
-  for(int i = 0; i < N; ++i){
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+      result[i][j] = 0;
+    }
     result[i][i] = 1;
   }
 }
-
-// Matrix transpose(const Matrix& input){
-//   Matrix output{};
-
-//   for(int i = 0; i < N; ++i)
-//     for(int j = 0; j < N; ++j)
-//       output[j][i] = input[i][j];
-
-//   return output;
-// }
 
 // Multiply two square matrices
 void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
-  // auto tr_b = transpose(b);
-
   for (int i = 0; i < N; i++) {
     for (int k = 0; k < N; k++) {
-      
-      double aik{a[i][k]};
       for (int j = 0; j < N; j++) {
-        result[i][j] += aik * b[k][j];
+        result[i][j] += a[i][k] * b[k][j];
       }
-
     }
   }
 }
