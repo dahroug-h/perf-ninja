@@ -47,20 +47,26 @@ static void filterVertically(uint8_t *output, const uint8_t *input,
     }
   
 
-
-  for (int c = 0; c < width; c++) {
-    // Middle part of computations with full kernel
     for (int r = radius; r < height - radius; r++) {
+ 
+    // Middle part of computations with full kernel
+     
       // Accumulation
-      int dot = 0;
-      for (int i = 0; i < radius + 1 + radius; i++) {
-        dot += input[(r - radius + i) * width + c] * kernel[i];
-      }
 
-      // Fast shift instead of division
-      int value = (dot + rounding) >> shift;
-      output[r * width + c] = static_cast<uint8_t>(value);
+    std::vector<int> dot(width, 0);
+
+    // int dot = 0;
+    for (int i = 0; i < radius + 1 + radius; i++) {
+      for(int c = 0; c < width; c++){
+        dot[c] += input[(r - radius + i) * width + c] * kernel[i];
+      }
     }
+
+    for (int c = 0; c < width; c++) {
+    // Fast shift instead of division
+      output[r * width + c] = static_cast<uint8_t>( (dot[c] + rounding) >> shift );
+    }
+
   }
 
 
