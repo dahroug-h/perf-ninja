@@ -36,14 +36,14 @@ Matrix transpose(Matrix input){
 void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
-  auto tr_b = transpose(b);
+  // auto tr_b = transpose(b);
 
 
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {
       double r_ij{};
       for (int k = 0; k < N; k++) {
-        r_ij += a[i][k] * tr_b[j][k];
+        r_ij += a[i][k] * b[k][j];
       }
 
       result[i][j] = r_ij;
