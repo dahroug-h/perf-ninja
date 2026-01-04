@@ -20,7 +20,7 @@ unsigned getSumOfDigits(unsigned n) {
 // Hint: Traversing a linked list is a long data dependency chain:
 //       to get the node N+1 you need to retrieve the node N first.
 //       Think how you can execute multiple dependency chains in parallel.
-unsigned solution(List *l1, List *l2) {
+unsigned solution1(List *l1, List *l2) {
   unsigned retVal = 0;
 
   List *head2 = l2;
@@ -39,4 +39,38 @@ unsigned solution(List *l1, List *l2) {
   }
 
   return retVal;
+}
+
+unsigned solution2(List *l1, List *l2) {
+  unsigned retVal = 0;
+
+  static constexpr size_t M = 16;
+  std::array<unsigned, M> values;
+
+  while (l1) {
+    size_t count = 0;
+    while (l1 && count < M) {
+      values[count++] = l1->value;
+      l1 = l1->next;
+    }
+
+    List* cur = l2;
+    while (cur && count != 0) {
+      unsigned v = cur->value;
+      for (size_t i = 0; i < count; i++) {
+        if (v == values[i]) {
+          retVal += getSumOfDigits(v);
+          std::swap(values[i], values[--count]);
+          break;
+        }
+      }
+      cur = cur->next;
+    }
+  }
+
+  return retVal;
+}
+
+unsigned solution(List *l1, List *l2) {
+  return solution2(l1, l2);
 }
