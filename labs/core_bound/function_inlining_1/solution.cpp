@@ -22,6 +22,26 @@ static int compare(const void *lhs, const void *rhs) {
   return 0;
 }
 
+// 1 - original - time 641
+// void solution(std::array<S, N> &arr) {
+//   qsort(arr.data(), arr.size(), sizeof(S), compare);
+// }
+
+// 2 - std::sort - time 427
+// void solution(std::array<S, N> &arr) {
+//   std::sort(arr.begin(), arr.end(), [](const S& lhs, const S& rhs) {
+//     return (lhs.key1 < rhs.key1) || (lhs.key1 == rhs.key1 && lhs.key2 < rhs.key2);
+//   });
+// }
+
+// 3 - S -> uin64_t  - time 348
 void solution(std::array<S, N> &arr) {
-  qsort(arr.data(), arr.size(), sizeof(S), compare);
+  for (auto& v : arr) {
+    std::swap(v.key1, v.key2);
+  }
+  auto& arr2 = reinterpret_cast<std::array<uint64_t, N>&>(arr);
+  std::sort(arr2.begin(), arr2.end());
+  for (auto& v : arr) {
+    std::swap(v.key1, v.key2);
+  }
 }
