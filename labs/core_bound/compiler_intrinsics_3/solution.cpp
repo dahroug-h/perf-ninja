@@ -29,9 +29,22 @@ Position<std::uint32_t> solution2(std::vector<Position<std::uint32_t>> const &in
   __m256i sum1 = _mm256_set1_epi64x(0);
   __m256i sum2 = _mm256_set1_epi64x(0);
 
+  // std::cout << data << " " << data+1 << "\n";
+  std::uint64_t x = 0;
+  std::uint64_t y = 0;
+  std::uint64_t z = 0;
+
+  if ((uint64_t)data % 64 != 0) {
+    x = data[0].x; 
+    y = data[0].y;
+    z = data[0].z;
+    i++;
+    data++;
+  }
+
   while (i + 8 <= N) {
     {
-      __m256i cur = _mm256_loadu_si256((__m256i const*)data);
+      __m256i cur = _mm256_load_si256((__m256i const*)data);
       sum1 = _mm256_add_epi64(sum1, _mm256_unpacklo_epi32(cur, zero));
       sum2 = _mm256_add_epi64(sum2, _mm256_unpackhi_epi32(cur, zero));
     }
@@ -61,9 +74,9 @@ Position<std::uint32_t> solution2(std::vector<Position<std::uint32_t>> const &in
   uint64_t* s1 = (uint64_t*)&sum1;
   uint64_t* s2 = (uint64_t*)&sum2;
 
-  std::uint64_t x = s1[0] + s1[2];
-  std::uint64_t y = s1[1] + s1[3];
-  std::uint64_t z = s2[0] + s2[2];
+  x += s1[0] + s1[2];
+  y += s1[1] + s1[3];
+  z += s2[0] + s2[2];
   while (i < N) {
     const auto& pos = *data;
     x += pos.x;
@@ -82,5 +95,5 @@ Position<std::uint32_t> solution2(std::vector<Position<std::uint32_t>> const &in
 }
 
 Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &input) {
-  return solution2(input);
+  return solution1(input);
 }
