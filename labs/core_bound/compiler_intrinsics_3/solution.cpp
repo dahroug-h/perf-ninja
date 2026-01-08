@@ -29,12 +29,13 @@ Position<std::uint32_t> solution2(std::vector<Position<std::uint32_t>> const &in
   __m256i sum1 = _mm256_set1_epi64x(0);
   __m256i sum2 = _mm256_set1_epi64x(0);
 
-  // std::cout << data << " " << data+1 << "\n";
+  // std::cout << data << " " << data+1 << " " << N << std::endl;
   std::uint64_t x = 0;
   std::uint64_t y = 0;
   std::uint64_t z = 0;
 
-  if ((uint64_t)data % 64 != 0) {
+  if ((uint64_t)data % 32 != 0 && N != 0) {
+    // std::cout << "\tshift: " << ((uint64_t)data % 64) << std::endl;
     x = data[0].x; 
     y = data[0].y;
     z = data[0].z;
