@@ -4,7 +4,7 @@
 #include <vector>
 
 template<class T>
-struct Position {
+struct alignas(16) Position {
   T x;
   T y;
   T z;
