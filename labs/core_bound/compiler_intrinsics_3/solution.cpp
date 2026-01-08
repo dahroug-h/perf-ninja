@@ -95,5 +95,5 @@ Position<std::uint32_t> solution2(std::vector<Position<std::uint32_t>> const &in
 }
 
 Position<std::uint32_t> solution(std::vector<Position<std::uint32_t>> const &input) {
-  return solution1(input);
+  return solution2(input);
 }
