@@ -29,17 +29,33 @@ Position<std::uint32_t> solution2(std::vector<Position<std::uint32_t>> const &in
   __m256i sum1 = _mm256_set1_epi64x(0);
   __m256i sum2 = _mm256_set1_epi64x(0);
 
-  while (i + 4 <= N) {
-    __m256i cur = _mm256_loadu_si256((__m256i const*)data);
-    sum1 = _mm256_add_epi64(sum1, _mm256_unpacklo_epi32(cur, zero));
-    sum2 = _mm256_add_epi64(sum2, _mm256_unpackhi_epi32(cur, zero));
+  while (i + 8 <= N) {
+    {
+      __m256i cur = _mm256_loadu_si256((__m256i const*)data);
+      sum1 = _mm256_add_epi64(sum1, _mm256_unpacklo_epi32(cur, zero));
+      sum2 = _mm256_add_epi64(sum2, _mm256_unpackhi_epi32(cur, zero));
+    }
 
-    __m256i cur2 = _mm256_loadu_si256((__m256i const*)(data + 2));
-    sum1 = _mm256_add_epi64(sum1, _mm256_unpacklo_epi32(cur2, zero));
-    sum2 = _mm256_add_epi64(sum2, _mm256_unpackhi_epi32(cur2, zero));
+    {
+      __m256i cur = _mm256_loadu_si256((__m256i const*)(data + 2));
+      sum1 = _mm256_add_epi64(sum1, _mm256_unpacklo_epi32(cur, zero));
+      sum2 = _mm256_add_epi64(sum2, _mm256_unpackhi_epi32(cur, zero));
+    }
 
-    i += 4;
-    data += 4;
+    {
+      __m256i cur = _mm256_loadu_si256((__m256i const*)(data + 4));
+      sum1 = _mm256_add_epi64(sum1, _mm256_unpacklo_epi32(cur, zero));
+      sum2 = _mm256_add_epi64(sum2, _mm256_unpackhi_epi32(cur, zero));
+    }
+
+    {
+      __m256i cur = _mm256_loadu_si256((__m256i const*)(data + 6));
+      sum1 = _mm256_add_epi64(sum1, _mm256_unpacklo_epi32(cur, zero));
+      sum2 = _mm256_add_epi64(sum2, _mm256_unpackhi_epi32(cur, zero));
+    }
+
+    i += 8;
+    data += 8;
   }
 
   uint64_t* s1 = (uint64_t*)&sum1;
