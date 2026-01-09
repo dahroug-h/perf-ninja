@@ -35,6 +35,20 @@ void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   }
 }
 
+// The optimized version of multiply
+void multiply2(Matrix &result, const Matrix &a, const Matrix &b) {
+  zero(result);
+
+  for (int i = 0; i < N; i++) {
+    for (int k = 0; k < N; k++) {
+      for (int j = 0; j < N; j++) {
+        result[i][j] += a[i][k] * b[k][j];
+      }
+    }
+  }
+}
+
+
 // Compute integer power of a given square matrix
 Matrix power(const Matrix &input, const uint32_t k) {
   // Temporary products
@@ -53,7 +67,7 @@ Matrix power(const Matrix &input, const uint32_t k) {
   for (auto i = k; i > 0; i /= 2) {
     if (i % 2 != 0) {
       // Multiply the product by element
-      multiply(*productNext, *productCurrent, *elementCurrent);
+      multiply2(*productNext, *productCurrent, *elementCurrent);
       std::swap(productNext, productCurrent);
 
       // Exit early to skip next squaring
