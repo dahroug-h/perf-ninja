@@ -16,8 +16,8 @@ struct S {
   bool operator<(const S &s) const { return this->i < s.i; }
 };
 
-template <int N>
-class TD;
+// template <int N>
+// class TD;
 
 // never compiles but shows the value of sizeof(S)
 // TD<sizeof(S)> td;
