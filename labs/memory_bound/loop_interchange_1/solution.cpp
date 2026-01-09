@@ -16,9 +16,8 @@ void zero(Matrix &result) {
 void identity(Matrix &result) {
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {
-      result[i][j] = 0;
+      result[i][j] = i == j ? 1 : 0;
     }
-    result[i][i] = 1;
   }
 }
 
@@ -76,7 +75,7 @@ Matrix power(const Matrix &input, const uint32_t k) {
     }
 
     // Square an element
-    multiply(*elementNext, *elementCurrent, *elementCurrent);
+    multiply2(*elementNext, *elementCurrent, *elementCurrent);
     std::swap(elementNext, elementCurrent);
   }
 
