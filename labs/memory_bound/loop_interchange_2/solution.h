@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+// baseline is ~100ms
+
 // Applies Gaussian blur to a grayscale image
 void blur(uint8_t *output, const uint8_t *input, const int width,
           const int height, uint8_t *temp);
