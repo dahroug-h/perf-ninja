@@ -13,8 +13,8 @@ int solution(const hash_map_t *hash_map, const std::vector<int> &lookups) {
   int result = 0;
 
   for (int i = 0; i < lookups.size(); i++) {
-    if (i + 2 < lookups.size()) {
-      hash_map->prefetch(lookups[i + 3]);
+    if (i + 8 < lookups.size()) {
+      hash_map->prefetch(lookups[i + 8]);
     }
 
     if (hash_map->find(lookups[i])) result += getSumOfDigits(lookups[i]);
