@@ -1,15 +1,59 @@
 #include "solution.hpp"
+#define SOLUTION
+
+#ifdef SOLUTION
+
+struct lookup_table {
+  std::vector<std::size_t> v;
+  lookup_table() : v(100) {
+    for (int i = 0; i < 100; i++) {
+      if (i < 13) {
+        v[i] = 0;
+      } else if (i < 29) {
+        v[i] = 1;
+      } else if (i < 41) {
+        v[i] = 2;
+      } else if (i < 53) {
+        v[i] = 3;
+      } else if (i < 71) {
+        v[i] = 4;
+      } else if (i < 83) {
+        v[i] = 5;
+      } else if (i < 100) {
+        v[i] = 6;
+      }
+    }
+  }
+};
+#endif
 
 static std::size_t mapToBucket(std::size_t v) {
-                              //   size of a bucket
-  if      (v < 13)  return 0; //   13
-  else if (v < 29)  return 1; //   16
-  else if (v < 41)  return 2; //   12
-  else if (v < 53)  return 3; //   12
-  else if (v < 71)  return 4; //   18
-  else if (v < 83)  return 5; //   12
-  else if (v < 100) return 6; //   17
+  //   size of a bucket
+
+#ifdef SOLUTION
+
+  static lookup_table table;
+  if (v >= 100) {
+    return DEFAULT_BUCKET;
+  }
+  return table.v[v];
+#else
+  if (v < 13)
+    return 0;  //   13
+  else if (v < 29)
+    return 1;  //   16
+  else if (v < 41)
+    return 2;  //   12
+  else if (v < 53)
+    return 3;  //   12
+  else if (v < 71)
+    return 4;  //   18
+  else if (v < 83)
+    return 5;  //   12
+  else if (v < 100)
+    return 6;  //   17
   return DEFAULT_BUCKET;
+#endif
 }
 
 std::array<std::size_t, NUM_BUCKETS> histogram(const std::vector<int> &values) {
