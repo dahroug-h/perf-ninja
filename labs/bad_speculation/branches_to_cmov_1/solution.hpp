@@ -42,7 +42,7 @@ public:
         //printCurrentGrid();
         int M = current.size();
         int N = current[0].size();
-        
+    
         // Loop through every cell
         for(int i = 0; i < M; i++) {
             for(int j = 0; j < N; j++) {
@@ -50,16 +50,12 @@ public:
                 // finding the number of neighbours that are alive                  
                 for(int p = -1; p <= 1; p++) {              // row-offet (-1,0,1)
                     for(int q = -1; q <= 1; q++) {          // col-offset (-1,0,1)
-                        // if((i + p < 0) ||                   // if row offset less than UPPER boundary
-                        //    (i + p > M - 1) ||               // if row offset more than LOWER boundary
-                        //    (j + q < 0) ||                   // if column offset less than LEFT boundary
-                        //    (j + q > N - 1))                 // if column offset more than RIGHT boundary
-                        //     continue;
-                        // aliveNeighbours += current[i + p][j + q];
-                        bool not_ok = (i + p < 0) || (i + p > M - 1) ||
-                                      (j + q < 0) || (j + q > N - 1);
-
-                        aliveNeighbours += not_ok ? 0 : current[i + p][j + q];
+                        if((i + p < 0) ||                   // if row offset less than UPPER boundary
+                           (i + p > M - 1) ||               // if row offset more than LOWER boundary
+                           (j + q < 0) ||                   // if column offset less than LEFT boundary
+                           (j + q > N - 1))                 // if column offset more than RIGHT boundary
+                            continue;
+                        aliveNeighbours += current[i + p][j + q];
                     }
                 }
                 // The cell needs to be subtracted from
@@ -67,24 +63,33 @@ public:
                 aliveNeighbours -= current[i][j];
 
                 // Implementing the Rules of Life:
-                switch(aliveNeighbours) {
-                    // 1. Cell is lonely and dies
-                    case 0:
-                    case 1:
-                        future[i][j] = 0;
-                        break;                   
-                    // 2. Remains the same
-                    case 2:
-                        future[i][j] = current[i][j];
-                        break;
-                    // 3. A new cell is born
-                    case 3:
-                        future[i][j] = 1;
-                        break;
-                    // 4. Cell dies due to over population
-                    default:
-                        future[i][j] = 0;
-                }
+
+                auto rule1 = (aliveNeighbours <= 1 || aliveNeighbours > 3);
+
+                auto rule2 = (aliveNeighbours == 2);
+
+                future[i][j] = rule1 ? 0 : (rule2 ? current[i][j] : 1);
+
+                // switch(aliveNeighbours) {
+
+
+                //     // 1. Cell is lonely and dies
+                //     case 0:
+                //     case 1:
+                //         future[i][j] = 0;
+                //         break;                   
+                //     // 2. Remains the same
+                //     case 2:
+                //         future[i][j] = current[i][j];
+                //         break;
+                //     // 3. A new cell is born
+                //     case 3:
+                //         future[i][j] = 1;
+                //         break;
+                //     // 4. Cell dies due to over population
+                //     default:
+                //         future[i][j] = 0;
+                // }
             }
         }
         std::swap(current, future);
