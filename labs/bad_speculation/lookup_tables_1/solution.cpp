@@ -5,8 +5,8 @@
 
 struct lookup_table {
   std::vector<std::size_t> v;
-  lookup_table() : v(100) {
-    for (int i = 0; i < 100; i++) {
+  lookup_table() : v(151) {
+    for (int i = 0; i <= 150; i++) {
       if (i < 13) {
         v[i] = 0;
       } else if (i < 29) {
@@ -21,6 +21,8 @@ struct lookup_table {
         v[i] = 5;
       } else if (i < 100) {
         v[i] = 6;
+      } else {
+        v[i] = DEFAULT_BUCKET;
       }
     }
   }
@@ -33,9 +35,7 @@ static std::size_t mapToBucket(std::size_t v) {
 #ifdef SOLUTION
 
   static lookup_table table;
-  if (v >= 100) {
-    return DEFAULT_BUCKET;
-  }
+
   return table.v[v];
 #else
   if (v < 13)
@@ -56,7 +56,7 @@ static std::size_t mapToBucket(std::size_t v) {
 #endif
 }
 
-std::array<std::size_t, NUM_BUCKETS> histogram(const std::vector<int> &values) {
+std::array<std::size_t, NUM_BUCKETS> histogram(const std::vector<int>& values) {
   std::array<std::size_t, NUM_BUCKETS> retBuckets{0};
   for (auto v : values) {
     retBuckets[mapToBucket(v)]++;
