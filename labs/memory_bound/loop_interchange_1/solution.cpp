@@ -2,6 +2,7 @@
 #include "solution.h"
 #include <memory>
 #include <string_view>
+#include <immintrin.h>
 
 // Make zero matrix
 void zero(Matrix &result) {
@@ -23,7 +24,7 @@ void identity(Matrix &result) {
 }
 
 // Multiply two square matrices
-void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
+void multiply1(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
   for (int i = 0; i < N; i++) {
@@ -33,6 +34,41 @@ void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
       }
     }
   }
+}
+
+void multiply2(Matrix &result, const Matrix &a, const Matrix &b) {
+  zero(result);
+
+  for (int i = 0; i < N; i++) {
+    for (int k = 0; k < N; k++) {
+      for (int j = 0; j < N; j++) {
+        result[i][j] += a[i][k] * b[k][j];
+      }
+    }
+  }
+}
+
+void multiply3(Matrix &result, const Matrix &a, const Matrix &b) {
+  zero(result);
+
+  for (int i = 0; i < N; i++) {
+    for (int k = 0; k < N; k++) {
+      __m256d aik = _mm256_set1_ps(a[i][k]);
+      const float* dt2 = b[k].data();
+      float* res = result[i].data();
+      for (int j = 0; j < N; j += 8) {
+        // result[i][j] += a[i][k] * b[k][j];
+        __m256d new_res = _mm256_add_ps(_mm256_loadu_ps(res), _mm256_mul_ps(aik, _mm256_loadu_ps(dt2)));
+        _mm256_storeu_ps(res, new_res);
+        res += 8;
+        dt2 += 8;
+      }
+    }
+  }
+}
+
+void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
+  return multiply2(result, a, b);
 }
 
 // Compute integer power of a given square matrix
