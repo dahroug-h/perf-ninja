@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 struct lookup_table {
-  uint16_t v[151];
+  uint8_t v[151];
   lookup_table() {
     for (int i = 0; i <= 150; i++) {
       if (i < 13) {
