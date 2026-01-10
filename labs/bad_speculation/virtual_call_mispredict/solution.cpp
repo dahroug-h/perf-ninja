@@ -1,5 +1,5 @@
 #include "solution.h"
-
+#define SOLUTION
 #include <random>
 void generateObjects(InstanceArray& array) {
   std::default_random_engine generator(0);
