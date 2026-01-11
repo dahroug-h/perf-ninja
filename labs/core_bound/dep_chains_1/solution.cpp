@@ -152,34 +152,33 @@ unsigned solution(List* l1, List* l2) {
     }
     while (true) {
       
-      // int i;
-      // #pragma unroll 8
-      // for ( i = 0; i < num_partitions; i++) {
-      //   if (p[i] != nullptr) {
-      //     processed++;
-
-      //     if (p[i]->value == v) {
-      //       retVal += getSumOfDigits(v);
-      //     }
-
-      //     if (__glibc_unlikely(i + 1 < num_partitions &&
-      //                          heads[i + 1] == p[i]->next)) {
-      //       p[i] = nullptr;
-      //     } else {
-      //       p[i] = p[i]->next;
-      //     }
-      //   }
-      // }
-
       int i;
-      i=0;DO();
-      i=1;DO();
-      i=2;DO();
-      i=3;DO();
-      i=4;DO();
-      i=5;DO();
-      i=6;DO();
-      i=7;DO();
+      #pragma unroll 8
+      for ( i = 0; i < num_partitions; i++) {
+        if (p[i] != nullptr) {
+          processed++;
+
+          if (p[i]->value == v) {
+            retVal += getSumOfDigits(v);
+          }
+
+          if (i + 1 < num_partitions && heads[i + 1] == p[i]->next) {
+            p[i] = nullptr;
+          } else {
+            p[i] = p[i]->next;
+          }
+        }
+      }
+
+      // int i;
+      // i=0;DO();
+      // i=1;DO();
+      // i=2;DO();
+      // i=3;DO();
+      // i=4;DO();
+      // i=5;DO();
+      // i=6;DO();
+      // i=7;DO();
 
       if (processed == l2_len) {
         break;
