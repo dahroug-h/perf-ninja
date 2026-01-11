@@ -1,5 +1,5 @@
 #include "solution.hpp"
-// #define SOLUTION
+#define SOLUTION
 #define MULTI_OVERLAP
 
 #include <array>
