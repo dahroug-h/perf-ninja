@@ -4,7 +4,7 @@
 
 #include <array>
 #include <iostream>
-
+// update dep_chain
 unsigned getSumOfDigits(unsigned n) {
   unsigned sum = 0;
   while (n != 0) {
