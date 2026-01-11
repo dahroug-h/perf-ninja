@@ -24,19 +24,50 @@ unsigned solution(List *l1, List *l2) {
   unsigned retVal = 0;
 
   List *head2 = l2;
+
+  List *fast = l2, *slow = l2;
+
+  while (fast != nullptr && fast->next != nullptr) {
+    slow = slow->next;
+    fast = fast->next->next;
+  }
+
+  List* mid = slow;
+
   // O(N^2) algorithm:
+  // while (l1) {
+  //   unsigned v = l1->value;
+  //   l2 = head2;
+  //   while (l2) {
+  //     if (l2->value == v) {
+  //       retVal += getSumOfDigits(v);
+  //       break;
+  //     }
+  //     l2 = l2->next;
+  //   }
+  //   l1 = l1->next;
+  // }
+
   while (l1) {
     unsigned v = l1->value;
     l2 = head2;
-    while (l2) {
-      if (l2->value == v) {
-        retVal += getSumOfDigits(v);
-        break;
+
+    auto p1 = head2;
+    auto p2 = mid;
+
+    while (p1 != mid && p2 != nullptr) {
+      if (p1->value == v) {
+        retVal += getSumOfDigits(p1->value);
       }
-      l2 = l2->next;
+      if (p2->value == v) {
+        retVal += getSumOfDigits(p2->value);
+      }
+
+      p2 = p2->next;
+      p1 = p1->next;
     }
+
     l1 = l1->next;
   }
-
   return retVal;
 }
