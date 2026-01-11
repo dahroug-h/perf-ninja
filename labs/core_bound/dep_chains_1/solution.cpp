@@ -22,8 +22,8 @@ unsigned getSumOfDigits(unsigned n) {
         retVal += getSumOfDigits(v);                      \
       }                                                   \
                                                           \
-      if (__glibc_unlikely(i + 1 < num_partitions &&      \
-                           heads[i + 1] == p[i]->next)) { \
+      if (i + 1 < num_partitions &&      \
+                           heads[i + 1] == p[i]->next) { \
         p[i] = nullptr;                                   \
       } else {                                            \
         p[i] = p[i]->next;                                \
