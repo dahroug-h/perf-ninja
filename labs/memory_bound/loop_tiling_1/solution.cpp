@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cassert>
 
-constexpr int ROW_TILE_SIZE = 400;
+constexpr int ROW_TILE_SIZE = 250;
 constexpr int COL_TILE_SIZE = 1;
 #define SOLUTION
 
@@ -62,11 +62,6 @@ bool solution(MatrixOfDoubles &in, MatrixOfDoubles &out) {
     }
   }
 
-  for (int i = COL_TILE_SIZE*col_step; i < size; i++) {
-    for (int j = 0; j < size; j++) {
-      out[i][j] = in[j][i];
-    }
-  }
 
   for (int i = row_step * ROW_TILE_SIZE; i < size; i++) {
     for (int j = 0; j < size; j++) {
