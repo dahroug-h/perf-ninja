@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <cassert>
 
-constexpr int ROW_TILE_SIZE = 250;
-constexpr int COL_TILE_SIZE = 8;
+constexpr int ROW_TILE_SIZE = 400;
+constexpr int COL_TILE_SIZE = 1;
 #define SOLUTION
 
 inline int div_func(int a, int b) { return (a ) / b; }
