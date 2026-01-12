@@ -62,15 +62,16 @@ unsigned getSumOfDigits(unsigned n) {
 
       l2 = head2;
       while (l2) {
+        unsigned v = l2->value;
+        l2 = l2->next;
+
         for (int i = 0; i < cnt; i++) {
-          if (l2->value == cache[i]) {
+          if (v == cache[i]) {
             retVal += getSumOfDigits(cache[i]);
             break;
           }
         }
-        l2 = l2->next;
       }
-     
     }
 
     return retVal;
