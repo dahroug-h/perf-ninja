@@ -25,7 +25,7 @@ unsigned getSumOfDigits(unsigned n) {
   //       Think how you can execute multiple dependency chains in parallel.
 
   constexpr int num_partitions = 128;
-  constexpr int num_cached = 4;
+  constexpr int num_cached = 8;
 #ifndef SOLUTION
   unsigned solution(List* l1, List* l2) {
     unsigned retVal = 0;
@@ -48,10 +48,9 @@ unsigned getSumOfDigits(unsigned n) {
   }
 #else
 
-   unsigned solution(List* l1, List* l2) {
+unsigned solution(List* l1, List* l2) {
     unsigned retVal = 0;
     unsigned cache[num_cached];
-    bool visit[num_cached];
     List* head2 = l2;
     List * head1  = l1;
     int l1_len = 0;
@@ -64,12 +63,11 @@ unsigned getSumOfDigits(unsigned n) {
 
     for (int l1_idx = 0; l1_idx < l1_len / num_cached; l1_idx++) {
       int cnt = 0;
-      while (l1 && cnt < num_cached) {
+      while (cnt < num_cached) {
         cache[cnt] = l1->value;
-        visit[cnt] = false;
         cnt++;
         l1 = l1->next;
-            }
+      }
 
       l2 = head2;
       int found = 0;
@@ -78,10 +76,12 @@ unsigned getSumOfDigits(unsigned n) {
         l2 = l2->next;
 
         for (int i = 0; i < cnt; i++) {
-          if (v == cache[i] && !visit[i]) {
+          if (v == cache[i]) {
             retVal += getSumOfDigits(cache[i]);
-            visit[i] = true;
             found++;
+            if (found == num_cached) {
+              break;
+            }
           }
         }
         // add 20% overhead here
