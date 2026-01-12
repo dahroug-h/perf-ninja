@@ -48,33 +48,62 @@ unsigned getSumOfDigits(unsigned n) {
   }
 #else
 
-  unsigned solution(List* l1, List* l2) {
+   unsigned solution(List* l1, List* l2) {
     unsigned retVal = 0;
     unsigned cache[num_cached];
+    bool visit[num_cached];
     List* head2 = l2;
+    List * head1  = l1;
+    int l1_len = 0;
     while (l1) {
+      l1 = l1->next;
+      l1_len++;
+    }
+
+    l1 = head1;
+
+    for (int l1_idx = 0; l1_idx < l1_len / num_cached; l1_idx++) {
       int cnt = 0;
       while (l1 && cnt < num_cached) {
         cache[cnt] = l1->value;
+        visit[cnt] = false;
         cnt++;
         l1 = l1->next;
-      }
+            }
 
       l2 = head2;
+      int found = 0;
       while (l2) {
         unsigned v = l2->value;
         l2 = l2->next;
 
         for (int i = 0; i < cnt; i++) {
-          if (v == cache[i]) {
+          if (v == cache[i] && !visit[i]) {
             retVal += getSumOfDigits(cache[i]);
-            break;
+            visit[i] = true;
+            found++;
           }
         }
+        // add 20% overhead here
+        // if (found == cnt) {
+        //   break;
+        // }
       }
+    }
+
+    while (l1) {
+      unsigned v = l1->value;
+      l2 = head2;
+      while (l2) {
+        if (l2->value == v) {
+          retVal += getSumOfDigits(v);
+          break;
+        }
+        l2 = l2->next;
+      }
+      l1 = l1->next;
     }
 
     return retVal;
   }
-
 #endif
