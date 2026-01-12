@@ -63,7 +63,7 @@ unsigned solution(List* l1, List* l2) {
 
     for (int l1_idx = 0; l1_idx < l1_len / num_cached; l1_idx++) {
       int cnt = 0;
-      while (cnt < num_cached) {
+      while (l1 && cnt < num_cached) {
         cache[cnt] = l1->value;
         cnt++;
         l1 = l1->next;
