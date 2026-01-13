@@ -14,7 +14,7 @@ std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
   hist.fill(0);
 #define SOLUTION
 #ifdef SOLUTION
-  constexpr int scale = 2;
+  constexpr int scale = 4;
   std::array<uint32_t, 256 * scale> my_hist;
   my_hist.fill(0);
 
