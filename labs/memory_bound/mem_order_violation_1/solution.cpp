@@ -11,7 +11,7 @@
 // Compute the histogram of image pixels
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
 
-    constexpr int kPrivateHistNum = 8;
+    constexpr int kPrivateHistNum = 2;
     std::array<std::array<uint32_t, 256>, kPrivateHistNum> private_hists{};
   
     for (auto& h : private_hists) {
