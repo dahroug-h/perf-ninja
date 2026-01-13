@@ -7,14 +7,15 @@ constexpr int maxRandom = 100;
 
 // FIXME: this data structure can be reduced in size
 struct S {
+  int i : 8;
   float d;
   long long l : 15;
   bool b : 1;
-  int i : 8;
   short s : 8;
 
   bool operator<(const S& s) const { return this->i < s.i; }
 } __attribute__((packed));
+int x =sizeof(S);
 
 void init(std::vector<S> &arr);
 S create_entry(int first_value, int second_value);
