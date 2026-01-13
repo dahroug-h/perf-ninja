@@ -8,8 +8,21 @@
 // This function allows you to change the number of columns in a matrix. 
 // In other words, it defines how many elements are in each row.
 // hint: you need to allocate dummy columns to achieve proper data alignment.
-int n_columns(int N) {  
+
+
+int n_columns(int N) {
+#ifdef SOLUTION
+  // return N;
+  int element_per_cache_line = CACHELINE_SIZE / sizeof(float);
+  if (N % element_per_cache_line == 0) {
+    return N;
+  }
+  // printf("N,K=%d,%d\n", N,
+  //        element_per_cache_line * (N / element_per_cache_line + 1));
+  return element_per_cache_line * (N / element_per_cache_line + 1);
+#else
   return N;
+#endif
 }
 // ******************************************
 
