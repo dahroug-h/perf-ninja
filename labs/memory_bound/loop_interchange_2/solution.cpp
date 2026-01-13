@@ -78,6 +78,8 @@ static void filterVertically(uint8_t* output, const uint8_t* input,
       int value =
           static_cast<int>(dots[c] / static_cast<float>(sums[c]) + 0.5f);
       output[r * width + c] = static_cast<uint8_t>(value);
+      dots[c] = 0;
+      sums[c] = 0;
     }
   }
 }
