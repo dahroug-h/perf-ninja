@@ -12,8 +12,19 @@
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
   std::array<uint32_t, 256> hist;
   hist.fill(0);
-  for (int i = 0; i < image.width * image.height; ++i)
-    hist[image.data[i]]++;
+
+  constexpr int scale = 2;
+  std::array<uint32_t, 256 * scale> my_hist;
+  my_hist.fill(0);
+
+  for (int i = 0; i < image.width * image.height; ++i) {
+    my_hist[(i % scale) * 256 + image.data[i]]++;
+  }
+
+  for (int i = 0; i < scale * 256; i++) {
+    hist[i % 256] += my_hist[i];
+  }
+
   return hist;
 }
 // ******************************************
