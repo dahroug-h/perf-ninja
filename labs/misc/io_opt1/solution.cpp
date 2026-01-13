@@ -3,7 +3,7 @@
 #include <fstream>
 
 #include "MappedFile.hpp"
-#include <stdexcept
+#include <stdexcept>
 
 uint32_t solution(const char* file_name) {
   MappedFile file{file_name};
