@@ -15,7 +15,6 @@ struct S {
 
   bool operator<(const S& s) const { return this->i < s.i; }
 } __attribute__((packed));
-int x =sizeof(S);
 
 void init(std::vector<S> &arr);
 S create_entry(int first_value, int second_value);
