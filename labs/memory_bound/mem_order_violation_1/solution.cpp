@@ -10,30 +10,32 @@
 // ONLY THE FOLLOWING FUNCTION IS BENCHMARKED
 // Compute the histogram of image pixels
 std::array<uint32_t, 256> computeHistogram(const GrayscaleImage& image) {
-  std::array<uint32_t, 256> hist;
-  hist.fill(0);
-#define SOLUTION
-#ifdef SOLUTION
-  constexpr int scale = 4;
-  std::array<uint32_t, 256 * scale> my_hist;
-  my_hist.fill(0);
 
-  for (int i = 0; i < image.width * image.height; ++i) {
-    my_hist[((i & 1) << 8) + image.data[i]]++;
-  }
+    constexpr int kPrivateHistNum = 4;
+    std::array<std::array<uint32_t, 256>, kPrivateHistNum> private_hists{};
+  
+    for (auto& h : private_hists) {
+        h.fill(0);
+    }
 
-  for (int i = 0; i < scale * 256; i++) {
-    hist[i % 256] += my_hist[i];
-  }
-// hist[image.data[i]]++;
-#else
-  for (int i = 0; i < image.width * image.height; ++i) {
-    hist[image.data[i]]++;
-  }
 
-#endif
+    const int total_pixels = image.width * image.height;
+    for (int i = 0; i < total_pixels; ++i) {
+      const uint8_t pixel_val = image.data[i];
 
-  return hist;
+      const int hist_idx = i % kPrivateHistNum;
+      private_hists[hist_idx][pixel_val]++;
+    }
+
+    std::array<uint32_t, 256> final_hist{};
+    final_hist.fill(0);
+    for (const auto& h : private_hists) {
+        for (int val = 0; val < 256; ++val) {
+            final_hist[val] += h[val];
+        }
+    }
+
+    return final_hist;
 }
 // ******************************************
 
