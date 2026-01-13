@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 uint32_t solution(const char* file_name) {
-  MappedFile file{file_name};
+  MappedFile file(file_name);
 
   // Initial value has all bits set to 1
   uint32_t crc = 0xff'ff'ff'ff;
