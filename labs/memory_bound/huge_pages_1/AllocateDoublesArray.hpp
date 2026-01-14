@@ -148,21 +148,66 @@ inline bool setRequiredPrivileges() {
 }
 
 #endif
-
+#define SOLUTION
 // Allocate an array of doubles of size `size`, return it as a
 // std::unique_ptr<double[], D>, where `D` is a custom deleter type
 inline auto allocateDoublesArray(size_t size) {
   // Allocate memory
-  double *alloc = new double[size];
+#ifndef SOLUTION
+  double* alloc = new double[size];
   // remember to cast the pointer to double* if your allocator returns void*
 
   // Deleters can be conveniently defined as lambdas, but you can explicitly
   // define a class if you're not comfortable with the syntax
-  auto deleter = [/* state = ... */](double *ptr) { delete[] ptr; };
+  auto deleter = [/* state = ... */](double* ptr) { delete[] ptr; };
+
+  return std::unique_ptr<double[], decltype(deleter)>(alloc,
+                                                      std::move(deleter));
+#else
+
+#if defined(ON_LINUX)
+#define MAP_HUGE_2MB (21 << MAP_HUGE_SHIFT)
+#define MAP_HUGE_1GB (30 << MAP_HUGE_SHIFT)
+  double* buf =
+      (double*)mmap(NULL, size * sizeof(double), PROT_WRITE | PROT_READ,
+                    MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
+  if (buf == MAP_FAILED) {
+    perror("mmaped");
+    std::exit(EXIT_FAILURE);
+  }
+
+  auto deleter = [size](double* ptr) { munmap(ptr, size * sizeof(double)); };
+
+  buf[0] = 1;
+
+  return std::unique_ptr<double[], decltype(deleter)>((double*)buf,
+                                                      std::move(deleter));
+
+#elif defined(ON_WINDOWS)
+  double* alloc = new double[size];
+  // remember to cast the pointer to double* if your allocator returns void*
+
+  // Deleters can be conveniently defined as lambdas, but you can explicitly
+  // define a class if you're not comfortable with the syntax
+  auto deleter = [/* state = ... */](double* ptr) { delete[] ptr; };
 
   return std::unique_ptr<double[], decltype(deleter)>(alloc,
                                                       std::move(deleter));
 
+#else
+
+  double* alloc = new double[size];
+  // remember to cast the pointer to double* if your allocator returns void*
+
+  // Deleters can be conveniently defined as lambdas, but you can explicitly
+  // define a class if you're not comfortable with the syntax
+  auto deleter = [/* state = ... */](double* ptr) { delete[] ptr; };
+
+  return std::unique_ptr<double[], decltype(deleter)>(alloc,
+                                                      std::move(deleter));
+#endif
+
+#endif
   // The above is equivalent to:
   // return std::make_unique<double[]>(size);
   // The more verbose version is meant to demonstrate the use of a custom
