@@ -186,7 +186,7 @@ inline auto allocateDoublesArray(size_t size) {
 #elif defined(ON_WINDOWS)
 
   static bool init = setRequiredPrivileges();
-  const SIZE_T allocSize = sizeof(double) * size;
+  SIZE_T allocSize = sizeof(double) * size;
 
  allocSize =
       ((allocSize + 2 * 1024 * 1024) / (2 * 1024 * 1024)) * 2 * 1024 * 1024;
