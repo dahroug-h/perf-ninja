@@ -187,6 +187,9 @@ inline auto allocateDoublesArray(size_t size) {
   setRequiredPrivileges();
   const SIZE_T allocSize = sizeof(double) * size;
 
+  allocSize =
+      ((allocSize + 2 * 1024 * 1024) / (2 * 1024 * 1024)) * 2 * 1024 * 1024;
+
   LPVOID lpMemBase =
       VirtualAlloc(NULL, allocSize, MEM_COMMIT | MEM_RESERVE | MEM_LARGE_PAGES,
                    PAGE_READWRITE);
