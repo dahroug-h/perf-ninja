@@ -147,6 +147,8 @@ inline bool setRequiredPrivileges() {
   }
 }
 
+static bool init = setRequiredPrivileges();
+
 #endif
 #define SOLUTION
 // Allocate an array of doubles of size `size`, return it as a
@@ -185,7 +187,7 @@ inline auto allocateDoublesArray(size_t size) {
 
 #elif defined(ON_WINDOWS)
 
-  static bool init = setRequiredPrivileges();
+
   SIZE_T allocSize = sizeof(double) * size;
 
  allocSize =
