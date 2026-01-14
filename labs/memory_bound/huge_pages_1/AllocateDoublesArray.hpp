@@ -188,7 +188,7 @@ inline auto allocateDoublesArray(size_t size) {
   if (!ok) {
     printf("not ok\n");
   }
-   SIZE_T allocSize = sizeof(double) * size;
+  const SIZE_T allocSize = sizeof(double) * size;
 
  allocSize =
       ((allocSize + 2 * 1024 * 1024) / (2 * 1024 * 1024)) * 2 * 1024 * 1024;
