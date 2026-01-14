@@ -188,7 +188,8 @@ inline auto allocateDoublesArray(size_t size) {
   const SIZE_T allocSize = sizeof(double) * size;
 
   LPVOID lpMemBase =
-      VirtualAlloc(NULL, allocSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+      VirtualAlloc(NULL, allocSize, MEM_COMMIT | MEM_RESERVE | MEM_LARGE_PAGES,
+                   PAGE_READWRITE);
 
   double* alloc = (double*)lpMemBase;
   // remember to cast the pointer to double* if your allocator returns void*
