@@ -184,7 +184,7 @@ inline auto allocateDoublesArray(size_t size) {
                                                       std::move(deleter));
 
 #elif defined(ON_WINDOWS)
-  detail::setRequiredPrivileges();
+  setRequiredPrivileges();
   const SIZE_T allocSize = sizeof(double) * size;
 
   LPVOID lpMemBase =
