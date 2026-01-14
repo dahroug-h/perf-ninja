@@ -184,15 +184,22 @@ inline auto allocateDoublesArray(size_t size) {
                                                       std::move(deleter));
 
 #elif defined(ON_WINDOWS)
-  setRequiredPrivileges();
-  const SIZE_T allocSize = sizeof(double) * size;
+  auto ok=setRequiredPrivileges();
+  if (!ok) {
+    printf("not ok\n");
+  }
+   SIZE_T allocSize = sizeof(double) * size;
 
-  allocSize =
+ allocSize =
       ((allocSize + 2 * 1024 * 1024) / (2 * 1024 * 1024)) * 2 * 1024 * 1024;
 
   LPVOID lpMemBase =
       VirtualAlloc(NULL, allocSize, MEM_COMMIT | MEM_RESERVE | MEM_LARGE_PAGES,
                    PAGE_READWRITE);
+
+  if (lpMemBase) {
+    printf("can not allocate\n");
+  }
 
   double* alloc = (double*)lpMemBase;
   // remember to cast the pointer to double* if your allocator returns void*
