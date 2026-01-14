@@ -184,18 +184,24 @@ inline auto allocateDoublesArray(size_t size) {
                                                       std::move(deleter));
 
 #elif defined(ON_WINDOWS)
-  double* alloc = new double[size];
+  detail::setRequiredPrivileges();
+  const SIZE_T allocSize = sizeof(double) * size;
+
+  LPVOID lpMemBase =
+      VirtualAlloc(NULL, allocSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+  double* alloc = (double*)lpMemBase;
   // remember to cast the pointer to double* if your allocator returns void*
 
   // Deleters can be conveniently defined as lambdas, but you can explicitly
   // define a class if you're not comfortable with the syntax
-  auto deleter = [/* state = ... */](double* ptr) { delete[] ptr; };
+  auto deleter = [size, lpMemBase](double* ptr) {
+    VirtualFree(lpMemBase, 0, MEM_RELEASE);
+  };
 
   return std::unique_ptr<double[], decltype(deleter)>(alloc,
                                                       std::move(deleter));
-
 #else
-
   double* alloc = new double[size];
   // remember to cast the pointer to double* if your allocator returns void*
 
@@ -205,6 +211,7 @@ inline auto allocateDoublesArray(size_t size) {
 
   return std::unique_ptr<double[], decltype(deleter)>(alloc,
                                                       std::move(deleter));
+
 #endif
 
 #endif
