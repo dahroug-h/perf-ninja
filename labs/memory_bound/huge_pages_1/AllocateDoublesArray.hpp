@@ -184,10 +184,8 @@ inline auto allocateDoublesArray(size_t size) {
                                                       std::move(deleter));
 
 #elif defined(ON_WINDOWS)
-  auto ok=setRequiredPrivileges();
-  if (!ok) {
-    printf("not ok\n");
-  }
+
+  static bool init = setRequiredPrivileges();
   const SIZE_T allocSize = sizeof(double) * size;
 
  allocSize =
