@@ -26,9 +26,14 @@ void identity(Matrix &result) {
 void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
+  // basically need to ensure that each matrix is being indexed in row major order
+  // so that all matrices are accessed sequentially in memory.
   for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      for (int k = 0; k < N; k++) {
+    for (int k = 0; k < N; k++) {
+      for (int j = 0; j < N; j++) {
+        // now that j is in the inner loop, b is being accessed sequentially
+        // along with result and a. In the original solution, b was accessed in col
+        // major order, meaning that each access (probably) required a new cache line.
         result[i][j] += a[i][k] * b[k][j];
       }
     }
