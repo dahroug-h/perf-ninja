@@ -5,7 +5,6 @@ constexpr int N = 1000000;
 constexpr int minRandom = 0;
 constexpr int maxRandom = 100;
 
-// FIXME: this data structure can be reduced in size
 struct S {
   // int i;
   // long long l;
@@ -13,11 +12,17 @@ struct S {
   // double d;
   // bool b;
 
-  long long l;
-  double d;
-  int i;
-  short s;
-  bool b;
+  // SOLUTION:
+  // Used smaller types using known value ranges
+  // Bit fields where necessary
+  // Eliminated padding by reordering members (largest to smallest)
+  // Float instead of double for d, as the precision is not critical
+
+  float d;
+  uint16_t l;
+  uint8_t i;
+  uint8_t s: 7;
+  uint8_t b : 1;
 
   bool operator<(const S &s) const { return this->i < s.i; }
 };
