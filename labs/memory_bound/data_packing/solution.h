@@ -1,5 +1,5 @@
 #include <vector>
-
+#include <cstdint> // IMPORTANT: Never forget your includes!
 // Assume those constants never change
 constexpr int N = 1000000;
 constexpr int minRandom = 0;
