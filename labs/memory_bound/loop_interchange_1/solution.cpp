@@ -26,9 +26,13 @@ void identity(Matrix &result) {
 void multiply(Matrix &result, const Matrix &a, const Matrix &b) {
   zero(result);
 
+  // Loop interchange:
+  // Changed from i-j-k to i-k-j
+  // Just this row major change here was sufficient to get 10x speedup and pass the assignment
+  // Compiler flags are already helping us
   for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
       for (int k = 0; k < N; k++) {
+        for (int j = 0; j < N; j++) {
         result[i][j] += a[i][k] * b[k][j];
       }
     }
