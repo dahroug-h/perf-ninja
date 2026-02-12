@@ -17,4 +17,4 @@ cmake --build . --target lab
 //trick for size
 template<int>
 class TD;
-TD<sizeof(S)> td;
+TD<sizeof(S)> td;,,
